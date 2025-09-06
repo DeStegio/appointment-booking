@@ -42,6 +42,9 @@
                         <a href="{{ route('provider.time-offs.index') }}">Time Offs</a>
                     @endif
                 @endif
+                @if (auth()->user()->isRole('customer'))
+                    <span class="user" style="color:#6c757d;">Find slots (manual): /providers/{providerId}/services/{serviceId}/slots?date=YYYY-MM-DD</span>
+                @endif
                 <form method="POST" action="{{ route('logout') }}" class="inline">
                     @csrf
                     <button type="submit" class="linky">Logout</button>

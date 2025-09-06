@@ -8,6 +8,7 @@ use App\Http\Controllers\Provider\ProviderScheduleController;
 use App\Http\Controllers\Provider\TimeOffController;
 use App\Http\Controllers\HealthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\AppointmentController;
 
 Route::view('/', 'welcome')->name('home');
 
@@ -34,5 +35,15 @@ Route::prefix('provider')
         Route::resource('time-offs', TimeOffController::class)->except(['show']);
     });
 
-// Health check endpoint (no closures → works with route:cache)
+// Health check endpoint (no closures -> works with route:cache)
 Route::get('/healthz', HealthController::class)->name('healthz');
+
+// Public slots route (no closures)
+Route::get('/providers/{provider}/services/{service}/slots', [AppointmentController::class, 'slots'])
+    ->name('appointments.slots');
+
+// Create appointment (auth only)
+Route::post('/appointments', [AppointmentController::class, 'store'])
+    ->middleware('auth')
+    ->name('appointments.store');
+
