@@ -1,24 +1,23 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Provider\ServiceController;
+use App\Http\Controllers\HealthController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-// Authentication routes
-Route::view('/login', 'auth.login')->name('login');
-Route::post('/login', function () {
-    // Placeholder for login attempt handling
-})->name('login.attempt');
+Route::view('/', 'welcome')->name('home');
 
 // Guest-only auth routes
 Route::middleware('guest')->group(function () {
-    Route::get('/register', [\App\Http\Controllers\Auth\RegisterController::class, 'show'])->name('register.show');
-    Route::post('/register', [\App\Http\Controllers\Auth\RegisterController::class, 'store'])->name('register.store');
+    Route::get('/login', [LoginController::class, 'show'])->name('login');
+    Route::post('/login', [LoginController::class, 'login'])->name('login.attempt');
+
+    Route::get('/register', [RegisterController::class, 'show'])->name('register.show');
+    Route::post('/register', [RegisterController::class, 'store'])->name('register.store');
 });
 
+// Provider area
 Route::prefix('provider')
     ->name('provider.')
     ->middleware(['auth', 'role:provider'])
@@ -26,5 +25,5 @@ Route::prefix('provider')
         Route::resource('services', ServiceController::class)->except(['show']);
     });
 
-// Health check endpoint
-Route::get('/healthz', fn() => 'ok');
+// Health check endpoint (no closures → works with route:cache)
+Route::get('/healthz', HealthController::class)->name('healthz');

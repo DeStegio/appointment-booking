@@ -6,6 +6,9 @@ services:
     container_name: laravel-app
     volumes:
       - ./:/var/www/html
+      - vendor:/var/www/html/vendor
+      - storage:/var/www/html/storage
+      - cache:/var/www/html/bootstrap/cache
     depends_on:
       - db
 
@@ -35,3 +38,6 @@ services:
 
 volumes:
   dbdata:
+  vendor:
+  storage:
+  cache:
