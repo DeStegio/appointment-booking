@@ -1,0 +1,13 @@
+# Docker & editor
+*.log
+vendor/
+node_modules/
+.env
+/.idea
+/.vscode
+/public/storage
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+/storage/logs/*
+/dbdata
