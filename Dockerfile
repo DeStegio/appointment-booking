@@ -14,3 +14,7 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 COPY docker/php/conf.d/*.ini /usr/local/etc/php/conf.d/
 
 WORKDIR /var/www/html
+
+# Ensure view cache directory exists and is writable
+RUN mkdir -p /tmp/laravel-views \
+    && chown -R www-data:www-data /tmp/laravel-views

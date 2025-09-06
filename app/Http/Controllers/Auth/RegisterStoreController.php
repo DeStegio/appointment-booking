@@ -3,14 +3,36 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\JsonResponse;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class RegisterStoreController extends Controller
 {
-    public function __invoke(): JsonResponse
+    public function __invoke(Request $request)
     {
-        // Placeholder for register handling
-        return response()->json(['message' => 'Not Implemented'], 501);
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'role' => ['required', 'string', 'in:' . implode(',', User::ROLES)],
+        ]);
+
+        $user = User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
+            'role' => $validated['role'],
+        ]);
+
+        Auth::login($user);
+        $request->session()->regenerate();
+
+        if ($request->expectsJson()) {
+            return response()->json(['ok' => true, 'redirect' => route('dashboard')]);
+        }
+
+        return redirect()->route('dashboard');
     }
 }
-
