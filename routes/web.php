@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Provider\ServiceController;
+use App\Http\Controllers\Provider\ProviderScheduleController;
 use App\Http\Controllers\HealthController;
 use App\Http\Controllers\DashboardController;
 
@@ -28,6 +29,7 @@ Route::prefix('provider')
     ->middleware(['auth', 'role:provider'])
     ->group(function () {
         Route::resource('services', ServiceController::class)->except(['show']);
+        Route::resource('schedules', ProviderScheduleController::class)->except(['show']);
     });
 
 // Health check endpoint (no closures → works with route:cache)

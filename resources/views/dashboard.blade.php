@@ -7,7 +7,12 @@
 
     <div style="margin-top:1rem;">
         <p>Your role: <code>{{ $user->role ?? 'n/a' }}</code></p>
+        @if (($user->role ?? null) === 'provider')
+            <div style="margin-top:0.5rem;">
+                <a href="{{ route('provider.services.index') }}" style="margin-right:0.75rem;">Services</a>
+                <a href="{{ route('provider.schedules.index') }}">My Schedules</a>
+            </div>
+        @endif
     </div>
 </div>
 @endsection
-
