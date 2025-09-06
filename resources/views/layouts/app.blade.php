@@ -38,6 +38,9 @@
                     @if (Route::has('provider.schedules.index'))
                         <a href="{{ route('provider.schedules.index') }}">My Schedules</a>
                     @endif
+                    @if (Route::has('provider.time-offs.index'))
+                        <a href="{{ route('provider.time-offs.index') }}">Time Offs</a>
+                    @endif
                 @endif
                 <form method="POST" action="{{ route('logout') }}" class="inline">
                     @csrf

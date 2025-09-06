@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Provider\ServiceController;
 use App\Http\Controllers\Provider\ProviderScheduleController;
+use App\Http\Controllers\Provider\TimeOffController;
 use App\Http\Controllers\HealthController;
 use App\Http\Controllers\DashboardController;
 
@@ -30,6 +31,7 @@ Route::prefix('provider')
     ->group(function () {
         Route::resource('services', ServiceController::class)->except(['show']);
         Route::resource('schedules', ProviderScheduleController::class)->except(['show']);
+        Route::resource('time-offs', TimeOffController::class)->except(['show']);
     });
 
 // Health check endpoint (no closures → works with route:cache)
