@@ -75,4 +75,46 @@ class AppointmentController extends Controller
 
         return redirect()->route('dashboard')->with('status', 'Appointment requested.');
     }
+
+    public function confirm(Appointment $appointment)
+    {
+        $this->authorize('confirm', $appointment);
+
+        if (!in_array(strtolower((string) $appointment->status), ['pending'], true)) {
+            return back()->withErrors('Invalid state transition.');
+        }
+
+        $appointment->status = 'confirmed';
+        $appointment->save();
+
+        return back()->with('status', 'Appointment confirmed.');
+    }
+
+    public function complete(Appointment $appointment)
+    {
+        $this->authorize('complete', $appointment);
+
+        if (strtolower((string) $appointment->status) !== 'confirmed') {
+            return back()->withErrors('Invalid state transition.');
+        }
+
+        $appointment->status = 'completed';
+        $appointment->save();
+
+        return back()->with('status', 'Appointment completed.');
+    }
+
+    public function cancel(Appointment $appointment)
+    {
+        $this->authorize('cancel', $appointment);
+
+        if (!in_array(strtolower((string) $appointment->status), ['pending', 'confirmed'], true)) {
+            return back()->withErrors('Invalid state transition.');
+        }
+
+        $appointment->status = 'cancelled';
+        $appointment->save();
+
+        return back()->with('status', 'Appointment cancelled.');
+    }
 }

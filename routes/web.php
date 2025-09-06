@@ -47,3 +47,9 @@ Route::post('/appointments', [AppointmentController::class, 'store'])
     ->middleware('auth')
     ->name('appointments.store');
 
+// Appointment lifecycle routes (auth only, no closures)
+Route::middleware('auth')->group(function () {
+    Route::patch('/appointments/{appointment}/confirm', [AppointmentController::class, 'confirm'])->name('appointments.confirm');
+    Route::patch('/appointments/{appointment}/complete', [AppointmentController::class, 'complete'])->name('appointments.complete');
+    Route::patch('/appointments/{appointment}/cancel',   [AppointmentController::class, 'cancel'])->name('appointments.cancel');
+});
