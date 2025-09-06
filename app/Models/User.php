@@ -63,4 +63,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(\App\Models\ProviderSchedule::class, 'provider_id');
     }
+
+    public function timeOffs()
+    {
+        return $this->hasMany(\App\Models\TimeOff::class, 'provider_id');
+    }
 }
