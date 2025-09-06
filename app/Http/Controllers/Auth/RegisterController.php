@@ -13,5 +13,13 @@ class RegisterController extends Controller
     {
         return view('auth.register');
     }
-}
 
+    /**
+     * Handle the registration submission (placeholder).
+     */
+    public function store(\Illuminate\Http\Request $request)
+    {
+        // Intentionally minimal: redirect to login until implemented
+        return redirect()->route('login');
+    }
+}
