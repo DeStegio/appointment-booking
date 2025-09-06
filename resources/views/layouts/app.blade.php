@@ -30,6 +30,15 @@
                 @else
                     <a href="{{ url('/') }}">Dashboard</a>
                 @endif
+
+                @if (auth()->user()->isRole('provider'))
+                    @if (Route::has('provider.services.index'))
+                        <a href="{{ route('provider.services.index') }}">Services</a>
+                    @endif
+                    @if (Route::has('provider.schedules.index'))
+                        <a href="{{ route('provider.schedules.index') }}">My Schedules</a>
+                    @endif
+                @endif
                 <form method="POST" action="{{ route('logout') }}" class="inline">
                     @csrf
                     <button type="submit" class="linky">Logout</button>
@@ -52,4 +61,3 @@
     </main>
 </body>
 </html>
-

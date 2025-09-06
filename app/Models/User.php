@@ -58,4 +58,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(\App\Models\Service::class, 'provider_id');
     }
+
+    public function providerSchedules()
+    {
+        return $this->hasMany(\App\Models\ProviderSchedule::class, 'provider_id');
+    }
 }
