@@ -53,5 +53,9 @@ class User extends Authenticatable
     {
         return strcasecmp((string) $this->role, $role) === 0;
     }
-}
 
+    public function services()
+    {
+        return $this->hasMany(\App\Models\Service::class, 'provider_id');
+    }
+}
