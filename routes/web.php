@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Provider\ServiceController;
 use App\Http\Controllers\HealthController;
+use App\Http\Controllers\DashboardController;
 
 Route::view('/', 'welcome')->name('home');
 
@@ -16,6 +17,10 @@ Route::middleware('guest')->group(function () {
     Route::get('/register', [RegisterController::class, 'show'])->name('register.show');
     Route::post('/register', [RegisterController::class, 'store'])->name('register.store');
 });
+
+// Authenticated routes
+Route::post('/logout', [LoginController::class, 'logout'])->middleware('auth')->name('logout');
+Route::get('/dashboard', DashboardController::class)->middleware('auth')->name('dashboard');
 
 // Provider area
 Route::prefix('provider')
