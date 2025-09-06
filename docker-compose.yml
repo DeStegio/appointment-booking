@@ -7,6 +7,7 @@ services:
       - vendor:/var/www/html/vendor
       - storage:/var/www/html/storage
       - cache:/var/www/html/bootstrap/cache
+    command: [ "bash", "-lc", "bash ./docker/app/init-perms.sh && php-fpm -F" ]
     depends_on:
       - db
 
