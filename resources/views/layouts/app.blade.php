@@ -23,6 +23,9 @@
             <a class="brand" href="{{ url('/') }}">{{ config('app.name', 'Laravel') }}</a>
         </div>
         <div>
+            @if (Route::has('providers.index'))
+                <a href="{{ route('providers.index') }}">Providers</a>
+            @endif
             @auth
                 <span class="user">{{ auth()->user()->name }}</span>
                 @if (Route::has('dashboard'))

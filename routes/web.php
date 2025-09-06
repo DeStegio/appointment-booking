@@ -12,6 +12,10 @@ use App\Http\Controllers\AppointmentController;
 
 Route::view('/', 'welcome')->name('home');
 
+// Public provider discovery (no closures; cache-friendly)
+Route::get('/providers', 'App\\Http\\Controllers\\Public\\ProviderDirectoryController@index')->name('providers.index');
+Route::get('/providers/{provider}', 'App\\Http\\Controllers\\Public\\ProviderDirectoryController@show')->name('providers.show');
+
 // Guest-only auth routes
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'show'])->name('login');
