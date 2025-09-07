@@ -42,7 +42,8 @@ class AppointmentController extends Controller
 
         $service = Service::findOrFail((int) $validated['service_id']);
         $providerId = (int) $validated['provider_id'];
-        $startAt = Carbon::createFromFormat('Y-m-d H:i:s', $validated['start_at']);
+        $tz = config('app.timezone');
+        $startAt = Carbon::createFromFormat('Y-m-d H:i:s', $validated['start_at'], $tz);
         $duration = (int) ($service->duration_minutes ?? 30);
         if ($duration <= 0) {
             $duration = 30;
@@ -54,24 +55,34 @@ class AppointmentController extends Controller
             return back()->withErrors(['service_id' => 'Service does not belong to the selected provider.'])->withInput();
         }
 
-        // Availability check
+        // Availability check (defense-in-depth)
         $date = $startAt->format('Y-m-d');
         $slots = $availability->getSlots($providerId, $service->id, $date);
         if (!in_array($startAt->format('Y-m-d H:i:s'), $slots, true)) {
-            return back()->withErrors(['start_at' => 'Selected time is no longer available.'])->withInput();
+            return back()->withErrors('That slot is no longer available. Please pick another.')->withInput();
         }
 
-        DB::transaction(function () use ($providerId, $service, $startAt, $endAt, $validated) {
-            Appointment::create([
-                'provider_id' => $providerId,
-                'customer_id' => Auth::id(),
-                'service_id' => $service->id,
-                'start_at' => $startAt->format('Y-m-d H:i:s'),
-                'end_at' => $endAt->format('Y-m-d H:i:s'),
-                'status' => 'pending',
-                'notes' => $validated['notes'] ?? null,
-            ]);
-        });
+        try {
+            DB::transaction(function () use ($providerId, $service, $startAt, $endAt, $validated) {
+                Appointment::create([
+                    'provider_id' => $providerId,
+                    'customer_id' => Auth::id(),
+                    'service_id' => $service->id,
+                    'start_at' => $startAt->format('Y-m-d H:i:s'),
+                    'end_at' => $endAt->format('Y-m-d H:i:s'),
+                    'status' => 'pending',
+                    'notes' => $validated['notes'] ?? null,
+                ]);
+            });
+        } catch (\Illuminate\Database\QueryException $e) {
+            // Handle unique (provider_id, start_at) violation gracefully
+            $message = (string) $e->getMessage();
+            if (stripos($message, 'provider_start_unique') !== false
+                || stripos($message, 'unique') !== false) {
+                return back()->withErrors('That slot is no longer available. Please pick another.')->withInput();
+            }
+            throw $e; // rethrow other DB errors
+        }
 
         return redirect()->route('dashboard')->with('status', 'Appointment requested.');
     }
