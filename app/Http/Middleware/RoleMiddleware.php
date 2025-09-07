@@ -34,6 +34,10 @@ class RoleMiddleware
         // compare case-insensitively against user's role
         foreach ($list as $role) {
             if (strcasecmp((string)$user->role, $role) === 0) {
+                // If provider area, enforce active provider
+                if (strcasecmp($role, 'provider') === 0 && (bool) ($user->is_active ?? true) !== true) {
+                    abort(403, 'Your provider profile is disabled. Please contact an administrator.');
+                }
                 return $next($request);
             }
         }
@@ -41,4 +45,3 @@ class RoleMiddleware
         abort(403, 'Forbidden: insufficient role.');
     }
 }
-

@@ -24,6 +24,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'is_active',
     ];
 
     /**
@@ -57,6 +58,11 @@ class User extends Authenticatable
     public function scopeProviders($q)
     {
         return $q->where('role', 'provider');
+    }
+
+    public function scopeActive($q)
+    {
+        return $q->where('is_active', true);
     }
 
     public function services()
