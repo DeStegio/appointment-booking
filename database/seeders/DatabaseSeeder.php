@@ -13,7 +13,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Quick demo users via dedicated seeder
-        $this->call(AuthTestSeeder::class);
+        // Seed full demo data for local development
+        $this->call(DemoSeeder::class);
     }
 }
