@@ -21,7 +21,11 @@ class AvailabilityService
      */
     public function getSlots(int $providerId, int $serviceId, string $dateYmd): array
     {
-        $date = CarbonImmutable::createFromFormat('Y-m-d', $dateYmd)->startOfDay();
+        $tz = config('app.timezone');
+        $date = CarbonImmutable::createFromFormat('Y-m-d', $dateYmd, $tz);
+        if ($date) {
+            $date = $date->startOfDay();
+        }
         if (!$date) {
             return [];
         }
@@ -51,6 +55,14 @@ class AvailabilityService
         $dayStart = $date;
         $dayEnd = $date->endOfDay();
 
+        // Enforce booking window: date <= today + booking_window_days
+        $windowDays = (int) config('appointments.booking_window_days', 60);
+        $today = CarbonImmutable::now($tz)->startOfDay();
+        $lastBookableDay = $today->addDays($windowDays);
+        if ($date->greaterThan($lastBookableDay)) {
+            return [];
+        }
+
         // Preload time offs and appointments overlapping that day
         $timeOffs = TimeOff::query()
             ->where('provider_id', $providerId)
@@ -69,7 +81,10 @@ class AvailabilityService
             })
             ->get(['start_at', 'end_at']);
 
-        $now = Carbon::now();
+        $leadMinutes = (int) config('appointments.lead_time_minutes', 120);
+        $bufferMinutes = (int) config('appointments.slot_buffer_minutes', 0);
+        $now = CarbonImmutable::now($tz);
+        $earliestStart = $now->addMinutes($leadMinutes);
         $slots = [];
 
         foreach ($schedules as $schedule) {
@@ -79,8 +94,8 @@ class AvailabilityService
             }
 
             // Build schedule window on the given date
-            $scheduleStart = CarbonImmutable::parse($dateYmd.' '.$schedule->start_time)->seconds(0);
-            $scheduleEnd = CarbonImmutable::parse($dateYmd.' '.$schedule->end_time)->seconds(0);
+            $scheduleStart = CarbonImmutable::parse($dateYmd.' '.$schedule->start_time, $tz);
+            $scheduleEnd = CarbonImmutable::parse($dateYmd.' '.$schedule->end_time, $tz);
 
             // Latest start time to fit duration
             $latestStart = $scheduleEnd->subMinutes($duration);
@@ -88,12 +103,23 @@ class AvailabilityService
                 continue; // duration does not fit in this schedule
             }
 
-            for ($cursor = $scheduleStart; !$cursor->greaterThan($latestStart); $cursor = $cursor->addMinutes($interval)) {
+            // Align the first cursor to interval grid and lead time
+            $cursor = $scheduleStart;
+            if ($earliestStart->greaterThan($cursor)) {
+                // Round up earliestStart to the next interval tick relative to scheduleStart
+                $diffMinutes = $scheduleStart->diffInMinutes($earliestStart, false);
+                if ($diffMinutes > 0) {
+                    $rounds = (int) ceil($diffMinutes / $interval);
+                    $cursor = $scheduleStart->addMinutes($rounds * $interval);
+                }
+            }
+
+            for (; !$cursor->greaterThan($latestStart); $cursor = $cursor->addMinutes($interval)) {
                 $slotStart = $cursor;
                 $slotEnd = $slotStart->addMinutes($duration);
 
                 // Exclude past slots
-                if ($slotStart->lt($now)) {
+                if ($slotStart->lt($earliestStart)) {
                     continue;
                 }
 
@@ -108,9 +134,13 @@ class AvailabilityService
                 }
 
                 // Overlaps with any appointment?
-                $blockedByAppt = $appointments->first(function ($ap) use ($slotStart, $slotEnd) {
+                $blockedByAppt = $appointments->first(function ($ap) use ($slotStart, $slotEnd, $bufferMinutes) {
                     $apStart = $ap->start_at instanceof Carbon ? $ap->start_at : Carbon::parse((string) $ap->start_at);
                     $apEnd = $ap->end_at instanceof Carbon ? $ap->end_at : Carbon::parse((string) $ap->end_at);
+                    if ($bufferMinutes > 0) {
+                        $apStart = (clone $apStart)->subMinutes($bufferMinutes);
+                        $apEnd = (clone $apEnd)->addMinutes($bufferMinutes);
+                    }
                     return $apStart < $slotEnd && $apEnd > $slotStart; // overlap
                 });
                 if ($blockedByAppt) {
@@ -128,4 +158,3 @@ class AvailabilityService
         return $slots;
     }
 }
-
