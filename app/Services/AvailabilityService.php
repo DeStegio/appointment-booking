@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Appointment;
+use App\Models\User;
 use App\Models\ProviderSchedule;
 use App\Models\Service;
 use App\Models\TimeOff;
@@ -21,6 +22,11 @@ class AvailabilityService
      */
     public function getSlots(int $providerId, int $serviceId, string $dateYmd): array
     {
+        // Optional short-circuit: if provider inactive, no slots
+        $provider = User::find($providerId);
+        if (!$provider || !(bool) $provider->is_active) {
+            return [];
+        }
         $tz = config('app.timezone');
         $date = CarbonImmutable::createFromFormat('Y-m-d', $dateYmd, $tz);
         if ($date) {

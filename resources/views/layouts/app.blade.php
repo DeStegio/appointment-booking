@@ -34,6 +34,12 @@
                     <a href="{{ url('/') }}">Dashboard</a>
                 @endif
 
+                @if (auth()->user()->isRole('admin'))
+                    @if (Route::has('admin.dashboard'))
+                        <a href="{{ route('admin.dashboard') }}">Admin</a>
+                    @endif
+                @endif
+
                 @if (auth()->user()->isRole('provider'))
                     @if (Route::has('provider.services.index'))
                         <a href="{{ route('provider.services.index') }}">Services</a>

@@ -16,7 +16,13 @@ class AppointmentController extends Controller
     public function slots(User $provider, Service $service, Request $request, AvailabilityService $availability)
     {
         // Ensure the service belongs to the provider to avoid mismatches
+        if (!$provider->is_active) {
+            abort(404);
+        }
         if ((int) $service->provider_id !== (int) $provider->id) {
+            abort(404);
+        }
+        if (!$service->is_active) {
             abort(404);
         }
 
@@ -42,6 +48,7 @@ class AppointmentController extends Controller
 
         $service = Service::findOrFail((int) $validated['service_id']);
         $providerId = (int) $validated['provider_id'];
+        $provider = User::findOrFail($providerId);
         $tz = config('app.timezone');
         $startAt = Carbon::createFromFormat('Y-m-d H:i:s', $validated['start_at'], $tz);
         $duration = (int) ($service->duration_minutes ?? 30);
@@ -53,6 +60,11 @@ class AppointmentController extends Controller
         // Verify provider-service relationship
         if ((int) $service->provider_id !== $providerId) {
             return back()->withErrors(['service_id' => 'Service does not belong to the selected provider.'])->withInput();
+        }
+
+        // Ensure provider is active
+        if (!$provider->is_active) {
+            return back()->withErrors('Provider is not accepting bookings.')->withInput();
         }
 
         // Availability check (defense-in-depth)
