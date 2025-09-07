@@ -1,0 +1,58 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  php-tests:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        ports: [3306:3306]
+        env:
+          MYSQL_DATABASE: laravel
+          MYSQL_USER: laravel
+          MYSQL_PASSWORD: secret
+          MYSQL_ROOT_PASSWORD: root
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, intl, pdo_mysql, dom, gd
+          coverage: none
+
+      - name: Wait for MySQL
+        run: |
+          for i in {1..60}; do
+            if mysqladmin ping -h 127.0.0.1 -proot --silent; then
+              echo "MySQL is up"; break
+            fi
+            sleep 2
+          done
+
+      - name: Copy CI env
+        run: cp .env.ci .env
+
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist --no-progress
+
+      - name: Generate key
+        run: php artisan key:generate
+
+      - name: Migrate & seed
+        run: php artisan migrate --force --seed
+
+      - name: Run tests (MySQL)
+        run: php artisan test -q --configuration phpunit.ci.xml
