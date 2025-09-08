@@ -22,7 +22,7 @@
         <a class="btn btn-sm focus-ring" href="{{ route('my.appointments.edit', $appointment) }}">Reschedule</a>
     @endcan
     @can('cancel', $appointment)
-        <form method="POST" action="{{ route('my.appointments.cancel', $appointment) }}" onsubmit="return confirm('Cancel this appointment?');">
+        <form method="POST" action="{{ route('my.appointments.cancel', $appointment) }}" data-confirm="Cancel this appointment?">
             @csrf
             @method('PATCH')
             <button type="submit" class="btn btn-danger btn-sm focus-ring">Cancel</button>

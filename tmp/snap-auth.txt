@@ -1,0 +1,2 @@
+Login/Register: center card forms with labeled inputs, helper/error badges, proper autocomplete; removed inline styles; buttons with focus-visible.
+

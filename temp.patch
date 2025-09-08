@@ -1,34 +1,209 @@
 *** Begin Patch
-*** Update File: routes/web.php
+*** Update File: public/css/app.css
 @@
--use Illuminate\Support\Facades\Route;
--use App\Http\Controllers\Auth\LoginController;
--use App\Http\Controllers\Auth\RegisterController;
--use App\Http\Controllers\Provider\ServiceController;
--use App\Http\Controllers\HealthController;
-+use Illuminate\Support\Facades\Route;
-+use App\Http\Controllers\Auth\LoginController;
-+use App\Http\Controllers\Auth\RegisterController;
-+use App\Http\Controllers\Provider\ServiceController;
-+use App\Http\Controllers\HealthController;
-+use App\Http\Controllers\DashboardController;
-@@
- Route::view('/', 'welcome')->name('home');
- 
- // Guest-only auth routes
- Route::middleware('guest')->group(function () {
-     Route::get('/login', [LoginController::class, 'show'])->name('login');
-     Route::post('/login', [LoginController::class, 'login'])->name('login.attempt');
- 
-     Route::get('/register', [RegisterController::class, 'show'])->name('register.show');
-     Route::post('/register', [RegisterController::class, 'store'])->name('register.store');
- });
+-/* public/css/app.css */
+-:root{
+-  --bg:#ffffff;
+-  --text:#111827;
+-  --muted:#6b7280;
+-  --primary:#2563eb;
+-  --primary-contrast:#ffffff;
+-  --border:#e5e7eb;
+-  --card:#fafafa;
+-  --danger:#dc2626;
+-  --success:#16a34a;
+-  --warning:#d97706;
+-  --radius:12px;
+-  --space:12px;
+-  --shadow:0 4px 12px rgba(0,0,0,.06);
+-}
+-*{box-sizing:border-box}
+-html,body{height:100%}
+-body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;color:var(--text);background:var(--bg);line-height:1.4}
+-
+-/* Layout */
+-.container{max-width:1000px;margin:0 auto;padding:24px}
+-.section{margin-block:24px}
+-.title{font-size:1.5rem;font-weight:700;margin:0 0 12px}
+-.muted{color:var(--muted)}
+-
+-/* Grid & Card */
+-.grid{display:grid;gap:var(--space);grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+-.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)}
+-.card h3{margin:0 0 6px}
+-
+-/* Links */
+-a.link{color:var(--primary);text-decoration:none}
+-a.link:hover{text-decoration:underline}
+-
+-/* Buttons */
+-.btn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);background:#fff;padding:8px 12px;border-radius:10px;cursor:pointer;text-decoration:none;color:inherit}
+-.btn:hover{box-shadow:0 2px 8px rgba(0,0,0,.05)}
+-.btn-primary{background:var(--primary);color:var(--primary-contrast);border-color:transparent}
+-.btn-danger{background:var(--danger);color:#fff;border-color:transparent}
+-.btn-muted{background:#f3f4f6}
+-.btn-sm{padding:6px 10px;border-radius:8px;font-size:.9rem}
+-
+-/* Forms */
+-.form-group{margin:0 0 12px}
+-.form-label{display:block;margin:0 0 6px;font-weight:600}
+-.form-control,.form-select{width:100%;border:1px solid var(--border);border-radius:10px;padding:8px 10px;background:#fff}
+-.inline-actions{display:flex;gap:8px;align-items:center}
+-
+-/* Table */
+-.table{width:100%;border-collapse:collapse}
+-.table th,.table td{border-bottom:1px solid var(--border);padding:10px;text-align:left}
+-.table th{font-weight:700;background:#f8fafc}
+-
+-/* Badges */
+-.badge{display:inline-block;padding:3px 8px;border-radius:999px;font-size:.8rem;border:1px solid var(--border);color:var(--muted)}
+-.badge-success{color:var(--success);border-color:var(--success)}
+-.badge-danger{color:var(--danger);border-color:var(--danger)}
+-.badge-warning{color:var(--warning);border-color:var(--warning)}
+-
+-
+-
+-
++/* public/css/app.css */
++/* 1) Reset & base */
++*,*::before,*::after{box-sizing:border-box}
++html,body{height:100%}
++body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased;color:var(--color-text);background:var(--color-bg)}
++img,svg,video,canvas,audio,iframe,embed,object{display:block;max-width:100%}
++input,button,textarea,select{font:inherit}
++button,summary{cursor:pointer}
++:
++focus{outline:none}
++:focus-visible{outline:2px solid var(--color-focus);outline-offset:2px}
 +
-+// Authenticated routes
-+Route::post('/logout', [LoginController::class, 'logout'])->middleware('auth')->name('logout');
-+Route::get('/dashboard', DashboardController::class)->middleware('auth')->name('dashboard');
-@@
--// Health check endpoint (no closures â†’ works with route:cache)
-+// Health check endpoint (no closures — works with route:cache)
- Route::get('/healthz', HealthController::class)->name('healthz');
++/* 2) Tokens */
++:root{
++  /* palette */
++  --color-bg:#ffffff;
++  --color-surface:#fafafa;
++  --color-text:#111827;
++  --color-muted:#6b7280;
++  --color-border:#e5e7eb;
++  --color-primary:#2563eb;
++  --color-primary-contrast:#ffffff;
++  --color-success:#16a34a;
++  --color-warning:#d97706;
++  --color-danger:#dc2626;
++  --color-focus:#2563eb;
++  /* shadow/radius/spacing */
++  --radius-sm:8px; --radius:12px; --radius-lg:16px;
++  --shadow-sm:0 1px 2px rgba(0,0,0,.06);
++  --shadow:0 4px 12px rgba(0,0,0,.08);
++  --space-1:4px; --space-2:8px; --space-3:12px; --space-4:16px; --space-5:20px; --space-6:24px;
++  /* type scale */
++  --fs-xs:.8rem; --fs-sm:.9rem; --fs-md:1rem; --fs-lg:1.125rem; --fs-xl:1.375rem; --fs-2xl:1.75rem;
++}
++
++/* Dark mode via class + system */
++@media (prefers-color-scheme: dark){
++  :root{--color-bg:#0b0f16;--color-surface:#0f1520;--color-text:#e5e7eb;--color-muted:#9aa3af;--color-border:#1f2937;--color-primary:#3b82f6;--color-primary-contrast:#0b0f16;--color-success:#22c55e;--color-warning:#f59e0b;--color-danger:#ef4444;--color-focus:#60a5fa}
++}
++.theme-dark{--color-bg:#0b0f16;--color-surface:#0f1520;--color-text:#e5e7eb;--color-muted:#9aa3af;--color-border:#1f2937;--color-primary:#3b82f6;--color-primary-contrast:#0b0f16;--color-success:#22c55e;--color-warning:#f59e0b;--color-danger:#ef4444;--color-focus:#60a5fa}
++
++/* 3) Typography */
++.h1{font-size:var(--fs-2xl);font-weight:700;margin:0 0 var(--space-3)}
++.h2{font-size:var(--fs-xl);font-weight:700;margin:0 0 var(--space-2)}
++.h3{font-size:var(--fs-lg);font-weight:600;margin:0 0 var(--space-2)}
++.lead{font-size:var(--fs-lg);color:var(--color-muted)}
++.muted{color:var(--color-muted)}
++.title{font-size:var(--fs-xl);font-weight:700;margin:0 0 var(--space-2)}
++
++/* 4) Layout */
++.container{max-width:1080px;margin-inline:auto;padding-inline:var(--space-6)}
++.section{padding-block:var(--space-6)}
++.grid{display:grid;gap:var(--space-4);grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
++.grid-2{display:grid;gap:var(--space-4);grid-template-columns:repeat(2,minmax(0,1fr))}
++.grid-3{display:grid;gap:var(--space-4);grid-template-columns:repeat(3,minmax(0,1fr))}
++@media (max-width:800px){.grid-2,.grid-3{grid-template-columns:1fr}}
++
++/* Navbar & Footer */
++.navbar{position:sticky;top:0;z-index:50;background:var(--color-bg);border-bottom:1px solid var(--color-border);backdrop-filter:saturate(120%) blur(4px)}
++.navbar .inner{display:flex;align-items:center;justify-content:space-between;gap:var(--space-3);padding:var(--space-3) 0}
++.navbar a{color:inherit;text-decoration:none}
++.navbar .nav{display:flex;align-items:center;gap:var(--space-3);flex-wrap:wrap}
++.footer{margin-top:var(--space-6);padding:var(--space-6) 0;border-top:1px solid var(--color-border);color:var(--color-muted)}
++
++/* 5) Card */
++.card{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius);box-shadow:var(--shadow);padding:var(--space-4)}
++.card-header{margin:-var(--space-4);margin-bottom:var(--space-4);padding:var(--space-4);border-bottom:1px solid var(--color-border);border-top-left-radius:var(--radius);border-top-right-radius:var(--radius);background:transparent}
++.card-body{padding:0}
++.card-footer{margin-top:var(--space-4);display:flex;gap:var(--space-3);justify-content:flex-end;flex-wrap:wrap}
++
++/* 6) Buttons */
++.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--color-border);background:var(--color-bg);padding:10px 14px;border-radius:10px;text-decoration:none;color:inherit;transition:transform .05s ease, box-shadow .2s ease}
++.btn:hover{box-shadow:var(--shadow-sm)}
++.btn:active{transform:translateY(1px)}
++.btn[disabled],.btn:disabled{opacity:.6;cursor:not-allowed}
++.btn-primary{background:var(--color-primary);border-color:transparent;color:var(--color-primary-contrast)}
++.btn-secondary{background:var(--color-surface)}
++.btn-ghost{background:transparent}
++.btn-danger{background:var(--color-danger);border-color:transparent;color:#fff}
++.btn-muted{background:#eef2f7}
++.btn-sm{padding:6px 10px;border-radius:8px;font-size:var(--fs-sm)}
++.is-loading{position:relative;color:transparent !important}
++.is-loading::after{content:"";position:absolute;inset:0;margin:auto;width:1em;height:1em;border-radius:50%;border:2px solid currentColor;border-right-color:transparent;animation:spin .6s linear infinite}
++
++/* 7) Forms */
++.form{max-width:640px}
++.field{margin-bottom:var(--space-3)}
++.form-label{display:block;margin-bottom:var(--space-2);font-weight:600}
++.form-control,.form-select,textarea{width:100%;border:1px solid var(--color-border);border-radius:10px;padding:10px 12px;background:var(--color-bg);color:var(--color-text)}
++.form-control:focus,.form-select:focus,textarea:focus{outline:2px solid var(--color-focus);outline-offset:2px}
++.input-group{display:flex;gap:var(--space-2);flex-wrap:wrap}
++.invalid{border-color:var(--color-danger)}
++.help{color:var(--color-muted);font-size:var(--fs-sm)}
++
++/* 8) Tables */
++.table-responsive{width:100%;overflow-x:auto}
++.table{width:100%;border-collapse:collapse;min-width:560px}
++.table th,.table td{border-bottom:1px solid var(--color-border);padding:10px;text-align:left}
++.table th{font-weight:700;background:rgba(0,0,0,.02)}
++.table-striped tbody tr:nth-child(even){background:rgba(0,0,0,.02)}
++.table-hover tbody tr:hover{background:rgba(0,0,0,.04)}
++
++/* 9) Badges */
++.badge{display:inline-block;padding:3px 8px;border-radius:999px;font-size:.8rem;border:1px solid var(--color-border);color:var(--color-muted)}
++.badge-success{color:var(--color-success);border-color:var(--color-success)}
++.badge-danger{color:var(--color-danger);border-color:var(--color-danger)}
++.badge-warning{color:var(--color-warning);border-color:var(--color-warning)}
++
++/* 10) Alerts */
++.alert{border:1px solid var(--color-border);border-radius:10px;padding:12px 14px;background:var(--color-surface)}
++.alert-success{border-color:color-mix(in oklab, var(--color-success) 40%, var(--color-border));}
++.alert-danger{border-color:color-mix(in oklab, var(--color-danger) 40%, var(--color-border));}
++.alert-warning{border-color:color-mix(in oklab, var(--color-warning) 40%, var(--color-border));}
++.alert .close{margin-left:auto}
++
++/* 11) Nav active */
++.nav-link[aria-current="page"]{font-weight:600}
++
++/* 12) Utilities */
++.flex{display:flex}
++.items-center{align-items:center}
++.justify-between{justify-content:space-between}
++.gap-1{gap:var(--space-1)}.gap-2{gap:var(--space-2)}.gap-3{gap:var(--space-3)}.gap-4{gap:var(--space-4)}.gap-5{gap:var(--space-5)}.gap-6{gap:var(--space-6)}
++.mt-0{margin-top:0}.mt-1{margin-top:var(--space-1)}.mt-2{margin-top:var(--space-2)}.mt-3{margin-top:var(--space-3)}.mt-4{margin-top:var(--space-4)}.mt-5{margin-top:var(--space-5)}.mt-6{margin-top:var(--space-6)}
++.mb-0{margin-bottom:0}.mb-1{margin-bottom:var(--space-1)}.mb-2{margin-bottom:var(--space-2)}.mb-3{margin-bottom:var(--space-3)}.mb-4{margin-bottom:var(--space-4)}.mb-5{margin-bottom:var(--space-5)}.mb-6{margin-bottom:var(--space-6)}
++.p-0{padding:0}.p-1{padding:var(--space-1)}.p-2{padding:var(--space-2)}.p-3{padding:var(--space-3)}.p-4{padding:var(--space-4)}.p-5{padding:var(--space-5)}.p-6{padding:var(--space-6)}
++.w-full{width:100%}
++.text-center{text-align:center}
++.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
++.hidden{display:none}
++
++/* 13) Animations */
++@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
++.fade-in{animation:fadeIn .25s ease both}
++@keyframes spin{to{transform:rotate(1turn)}}
++.pulse{animation:pulse 1.6s ease-in-out infinite}
++@keyframes pulse{0%,100%{opacity:.6}50%{opacity:1}}
++
++/* 14) Slots styling (optional small polish) */
++.slot-btn{display:inline-flex;align-items:center;justify-content:center;padding:8px 10px;border:1px solid var(--color-border);border-radius:10px;margin:6px 6px 0 0;min-width:64px;background:var(--color-bg)}
++.slot-btn:hover{box-shadow:var(--shadow-sm)}
++
 *** End Patch

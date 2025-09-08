@@ -30,7 +30,7 @@
                         <td>
                             <div class="inline-actions">
                             <a class="btn btn-sm focus-ring" href="{{ route('provider.time-offs.edit', $timeOff) }}">Edit</a>
-                            <form action="{{ route('provider.time-offs.destroy', $timeOff) }}" method="POST" onsubmit="return confirm('Delete this time off?');">
+                            <form action="{{ route('provider.time-offs.destroy', $timeOff) }}" method="POST" data-confirm="Delete this time off?">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger btn-sm focus-ring">Delete</button>
