@@ -20,4 +20,10 @@ ENV VIEW_COMPILED_PATH=/tmp/laravel-views
 
 # Ensure view cache directory exists and is writable
 RUN mkdir -p /tmp/laravel-views \
-    && chown -R www-data:www-data /tmp/laravel-views
+    && chown -R www-data:www-data /tmp/laravel-views \
+    && chmod -R 775 /tmp/laravel-views
+
+# Entrypoint to prepare permissions and start php-fpm
+COPY docker/php/entrypoint.sh /usr/local/bin/app-entrypoint
+RUN chmod +x /usr/local/bin/app-entrypoint
+ENTRYPOINT ["app-entrypoint"]

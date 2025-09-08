@@ -2,12 +2,16 @@ services:
   app:
     build: .
     container_name: laravel-app
+    user: "33:33"   # www-data uid:gid on Debian/Alpine images
+    environment:
+      - VIEW_COMPILED_PATH=/tmp/laravel-views
+    tmpfs:
+      - /tmp/laravel-views
     volumes:
       - ./:/var/www/html
       - vendor:/var/www/html/vendor
       - storage:/var/www/html/storage
       - cache:/var/www/html/bootstrap/cache
-    command: [ "bash", "-lc", "./docker/app/init-perms.sh && php-fpm -F" ]
     depends_on:
       - db
 

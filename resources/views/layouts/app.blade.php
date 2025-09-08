@@ -24,7 +24,7 @@
         </div>
         <div>
             @if (Route::has('providers.index'))
-                <a href="{{ route('providers.index') }}">Providers</a>
+                <a href="{{ route('providers.index') }}">Find a Provider</a>
             @endif
             @auth
                 <span class="user">{{ auth()->user()->name }}</span>
