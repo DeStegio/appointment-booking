@@ -14,9 +14,9 @@ use App\Http\Controllers\Provider\AppointmentController as ProviderAppointmentCo
 
 Route::view('/', 'welcome')->name('home');
 
-// Public provider discovery (no closures; cache-friendly)
-Route::get('/providers', 'App\\Http\\Controllers\\Public\\ProviderDirectoryController@index')->name('providers.index');
-Route::get('/providers/{provider}', 'App\\Http\\Controllers\\Public\\ProviderDirectoryController@show')->name('providers.show');
+// Public provider directory (allow slug or id via model fallback)
+Route::get('/providers', [\App\Http\Controllers\Directory\ProviderDirectoryController::class, 'index'])->name('providers.index');
+Route::get('/providers/{provider}', [\App\Http\Controllers\Directory\ProviderDirectoryController::class, 'show'])->name('providers.show');
 
 // Guest-only auth routes
 Route::middleware('guest')->group(function () {
@@ -44,9 +44,12 @@ Route::prefix('provider')
 // Health check endpoint (no closures -> works with route:cache)
 Route::get('/healthz', HealthController::class)->name('healthz');
 
-// Public slots route (no closures)
-Route::get('/providers/{provider}/services/{service}/slots', [AppointmentController::class, 'slots'])
-    ->name('appointments.slots');
+// Public slots view (existing for booking flow and tests)
+Route::get('/providers/{provider}/services/{service}/slots', [AppointmentController::class, 'slots'])->name('appointments.slots');
+
+// Public slots JSON for slug-based directory (avoid path conflict by using .json suffix)
+Route::get('/providers/{provider:slug}/services/{service:slug}/slots.json', [\App\Http\Controllers\Directory\ProviderDirectoryController::class, 'slots'])
+    ->name('providers.service.slots');
 
 // Create appointment (auth only)
 Route::post('/appointments', [AppointmentController::class, 'store'])
