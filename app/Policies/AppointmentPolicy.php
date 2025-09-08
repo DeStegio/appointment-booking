@@ -27,20 +27,13 @@ class AppointmentPolicy
     }
 
     /**
-     * Complete: provider owner, appointment confirmed, and start_at <= now()+1 day.
+     * Complete: provider owner and appointment is confirmed. No time restriction.
      */
     public function complete(User $user, Appointment $appointment): bool
     {
-        if ((int) $appointment->provider_id !== (int) $user->id) {
-            return false;
-        }
-        if (strcasecmp((string) $appointment->status, 'confirmed') !== 0) {
-            return false;
-        }
-        $start = $appointment->start_at instanceof \DateTimeInterface
-            ? Carbon::instance($appointment->start_at)
-            : Carbon::parse((string) $appointment->start_at);
-        return $start->lessThanOrEqualTo(Carbon::now()->addDay());
+        return $user->isRole('provider')
+            && (int) $appointment->provider_id === (int) $user->id
+            && $appointment->status === 'confirmed';
     }
 
     /**

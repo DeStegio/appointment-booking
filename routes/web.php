@@ -53,10 +53,14 @@ Route::post('/appointments', [AppointmentController::class, 'store'])
     ->middleware('auth')
     ->name('appointments.store');
 
-// Appointment lifecycle routes (auth only, no closures)
-Route::middleware('auth')->group(function () {
+// Appointment lifecycle routes
+// Provider-only for confirm/complete
+Route::middleware(['auth','role:provider'])->group(function () {
     Route::patch('/appointments/{appointment}/confirm', [AppointmentController::class, 'confirm'])->name('appointments.confirm');
     Route::patch('/appointments/{appointment}/complete', [AppointmentController::class, 'complete'])->name('appointments.complete');
+});
+// Cancel allowed for any authenticated user (policy will enforce owner rules)
+Route::middleware('auth')->group(function () {
     Route::patch('/appointments/{appointment}/cancel',   [AppointmentController::class, 'cancel'])->name('appointments.cancel');
 });
 

@@ -117,14 +117,10 @@ class AppointmentController extends Controller
     {
         $this->authorize('complete', $appointment);
 
-        if (strtolower((string) $appointment->status) !== 'confirmed') {
-            return back()->withErrors('Invalid state transition.');
-        }
-
         $appointment->status = 'completed';
         $appointment->save();
 
-        return back()->with('status', 'Appointment completed.');
+        return back()->with('status', 'Appointment completed');
     }
 
     public function cancel(Appointment $appointment)
