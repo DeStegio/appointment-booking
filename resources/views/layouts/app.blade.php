@@ -44,6 +44,9 @@
                     @if (Route::has('provider.services.index'))
                         <a href="{{ route('provider.services.index') }}">Services</a>
                     @endif
+                    @if (Route::has('provider.appointments.index'))
+                        <a href="{{ route('provider.appointments.index') }}">Appointments</a>
+                    @endif
                     @if (Route::has('provider.schedules.index'))
                         <a href="{{ route('provider.schedules.index') }}">My Schedules</a>
                     @endif
@@ -52,7 +55,9 @@
                     @endif
                 @endif
                 @if (auth()->user()->isRole('customer'))
-                    <span class="user" style="color:#6c757d;">Find slots (manual): /providers/{providerId}/services/{serviceId}/slots?date=YYYY-MM-DD</span>
+                    @if (Route::has('my.appointments.index'))
+                        <a href="{{ route('my.appointments.index') }}">My Appointments</a>
+                    @endif
                 @endif
                 <form method="POST" action="{{ route('logout') }}" class="inline">
                     @csrf

@@ -39,4 +39,24 @@ class Appointment extends Model
         $end = $this->end_at instanceof Carbon ? $this->end_at : Carbon::parse((string) $this->end_at);
         return (int) $start->diffInMinutes($end);
     }
+
+    public function isPast(): bool
+    {
+        $start = $this->start_at instanceof Carbon ? $this->start_at : Carbon::parse((string) $this->start_at);
+        return $start->isPast();
+    }
+
+    public function scopeUpcomingForProvider($q, int $providerId)
+    {
+        return $q->where('provider_id', $providerId)
+            ->where('start_at', '>=', Carbon::now())
+            ->orderBy('start_at', 'asc');
+    }
+
+    public function scopeUpcomingForCustomer($q, int $customerId)
+    {
+        return $q->where('customer_id', $customerId)
+            ->where('start_at', '>=', Carbon::now())
+            ->orderBy('start_at', 'asc');
+    }
 }

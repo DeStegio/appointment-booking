@@ -9,6 +9,8 @@ use App\Http\Controllers\Provider\TimeOffController;
 use App\Http\Controllers\HealthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\Customer\AppointmentController as CustomerAppointmentController;
+use App\Http\Controllers\Provider\AppointmentController as ProviderAppointmentController;
 
 Route::view('/', 'welcome')->name('home');
 
@@ -57,6 +59,26 @@ Route::middleware('auth')->group(function () {
     Route::patch('/appointments/{appointment}/complete', [AppointmentController::class, 'complete'])->name('appointments.complete');
     Route::patch('/appointments/{appointment}/cancel',   [AppointmentController::class, 'cancel'])->name('appointments.cancel');
 });
+
+// Self-service: Customer area
+Route::middleware(['auth','role:customer'])
+    ->prefix('my')
+    ->name('my.')
+    ->group(function () {
+        Route::get('/appointments', [CustomerAppointmentController::class, 'index'])->name('appointments.index');
+        Route::get('/appointments/{appointment}', [CustomerAppointmentController::class, 'show'])->name('appointments.show');
+        Route::get('/appointments/{appointment}/reschedule', [CustomerAppointmentController::class, 'edit'])->name('appointments.edit');
+        Route::patch('/appointments/{appointment}/reschedule', [CustomerAppointmentController::class, 'update'])->name('appointments.update');
+        Route::patch('/appointments/{appointment}/cancel', [CustomerAppointmentController::class, 'cancel'])->name('appointments.cancel');
+    });
+
+// Self-service: Provider area
+Route::middleware(['auth','role:provider'])
+    ->prefix('provider')
+    ->name('provider.')
+    ->group(function () {
+        Route::get('/appointments', [ProviderAppointmentController::class, 'index'])->name('appointments.index');
+    });
 
 // Admin area
 Route::prefix('admin')
