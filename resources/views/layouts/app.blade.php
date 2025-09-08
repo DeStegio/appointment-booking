@@ -44,6 +44,9 @@
                     @if (Route::has('provider.services.index'))
                         <a href="{{ route('provider.services.index') }}">Services</a>
                     @endif
+                    @if (Route::has('calendar.day'))
+                        <a href="{{ route('calendar.day') }}">Calendar</a>
+                    @endif
                     @if (Route::has('provider.appointments.index'))
                         <a href="{{ route('provider.appointments.index') }}">Appointments</a>
                     @endif

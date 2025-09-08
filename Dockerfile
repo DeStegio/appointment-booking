@@ -15,6 +15,9 @@ COPY docker/php/conf.d/*.ini /usr/local/etc/php/conf.d/
 
 WORKDIR /var/www/html
 
+# Configure compiled Blade view path
+ENV VIEW_COMPILED_PATH=/tmp/laravel-views
+
 # Ensure view cache directory exists and is writable
 RUN mkdir -p /tmp/laravel-views \
     && chown -R www-data:www-data /tmp/laravel-views
