@@ -1,0 +1,3 @@
+Provider schedules/time-offs: tables responsive; confirmed deletes use data-confirm; forms structured with cards and consistent action bars.
+Calendar day view: removed inline onchange; uses data-auto-submit.
+

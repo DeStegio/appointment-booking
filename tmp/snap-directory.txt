@@ -1,0 +1,3 @@
+Providers index: responsive provider cards with service count, CTA link.
+Provider show: provider header + service cards each with duration/price and View slots button; removed inline JS.
+

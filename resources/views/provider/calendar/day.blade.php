@@ -12,7 +12,7 @@
 <form method="GET" action="{{ route('calendar.day') }}" class="mb-3">
   <input type="hidden" name="date" value="{{ $date->toDateString() }}">
   <label class="form-label" for="service_id">Service</label>
-  <select class="form-select" id="service_id" name="service_id" onchange="this.form.submit()">
+  <select class="form-select" id="service_id" name="service_id" data-auto-submit>
     @foreach($services as $svc)
       <option value="{{ $svc->id }}" @selected($service && $service->id===$svc->id)>{{ $svc->name }} ({{ $svc->duration_minutes }}m)</option>
     @endforeach

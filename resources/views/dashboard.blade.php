@@ -67,7 +67,7 @@
                         </td>
                         <td>
                             @if (in_array(strtolower((string) $appt->status), ['pending','confirmed'], true) && (int) $appt->customer_id === (int) ($user->id ?? 0))
-                                <form method="POST" action="{{ route('appointments.cancel', $appt) }}" class="inline-actions">
+                                <form method="POST" action="{{ route('appointments.cancel', $appt) }}" class="inline-actions" data-confirm="Cancel this appointment?">
                                     @csrf
                                     @method('PATCH')
                                     <button type="submit" class="btn btn-danger btn-sm focus-ring">Cancel</button>
@@ -128,7 +128,7 @@
                                     @method('PATCH')
                                     <button type="submit" class="btn btn-primary btn-sm focus-ring">Confirm</button>
                                 </form>
-                                <form method="POST" action="{{ route('appointments.cancel', $appt) }}" class="inline-actions">
+                                <form method="POST" action="{{ route('appointments.cancel', $appt) }}" class="inline-actions" data-confirm="Cancel this appointment?">
                                     @csrf
                                     @method('PATCH')
                                     <button type="submit" class="btn btn-danger btn-sm focus-ring">Cancel</button>
@@ -139,7 +139,7 @@
                                     @method('PATCH')
                                     <button type="submit" class="btn btn-primary btn-sm focus-ring">Complete</button>
                                 </form>
-                                <form method="POST" action="{{ route('appointments.cancel', $appt) }}" class="inline-actions">
+                                <form method="POST" action="{{ route('appointments.cancel', $appt) }}" class="inline-actions" data-confirm="Cancel this appointment?">
                                     @csrf
                                     @method('PATCH')
                                     <button type="submit" class="btn btn-danger btn-sm focus-ring">Cancel</button>

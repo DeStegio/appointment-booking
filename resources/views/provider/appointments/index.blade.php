@@ -39,7 +39,7 @@
                     </form>
                 @endcan
                 @can('cancel', $a)
-                    <form method="POST" action="{{ route('appointments.cancel', $a) }}" class="inline-actions" onsubmit="return confirm('Cancel this appointment?');">
+                    <form method="POST" action="{{ route('appointments.cancel', $a) }}" class="inline-actions" data-confirm="Cancel this appointment?">
                         @csrf @method('PATCH')
                         <button type="submit" class="btn btn-danger btn-sm focus-ring">Cancel</button>
                     </form>
@@ -82,7 +82,7 @@
                     </form>
                 @endcan
                 @can('cancel', $a)
-                    <form method="POST" action="{{ route('appointments.cancel', $a) }}" class="inline-actions" onsubmit="return confirm('Cancel this appointment?');">
+                    <form method="POST" action="{{ route('appointments.cancel', $a) }}" class="inline-actions" data-confirm="Cancel this appointment?">
                         @csrf @method('PATCH')
                         <button type="submit" class="btn btn-danger btn-sm focus-ring">Cancel</button>
                     </form>

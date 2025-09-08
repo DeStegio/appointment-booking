@@ -1,0 +1,3 @@
+Before: layout had minimal navbar, inline alerts, no ui.js, no footer, limited focus/contrast. Theme toggle text garbled.
+After: sticky navbar with active states, skip link, centralized alerts partial, theme toggle with System/Light/Dark cycle, ui.js wired, main wrapped in container/section, footer added.
+

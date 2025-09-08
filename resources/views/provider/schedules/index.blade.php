@@ -43,7 +43,7 @@
                         <td>
                             <div class="inline-actions">
                             <a class="btn btn-sm focus-ring" href="{{ route('provider.schedules.edit', $schedule) }}">Edit</a>
-                            <form action="{{ route('provider.schedules.destroy', $schedule) }}" method="POST" onsubmit="return confirm('Delete this schedule?');">
+                            <form action="{{ route('provider.schedules.destroy', $schedule) }}" method="POST" data-confirm="Delete this schedule?">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger btn-sm focus-ring">Delete</button>
