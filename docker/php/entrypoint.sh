@@ -1,14 +1,16 @@
 #!/usr/bin/env sh
 set -e
 
-# Prepare writable dirs
-mkdir -p "$VIEW_COMPILED_PATH" storage/framework/{cache,sessions,views} bootstrap/cache
-chown -R www-data:www-data "$VIEW_COMPILED_PATH" storage bootstrap/cache || true
-chmod -R 775 "$VIEW_COMPILED_PATH" storage bootstrap/cache || true
+# prepare compiled dir every start
+mkdir -p "${VIEW_COMPILED_PATH:-/tmp/laravel-views}"
+chmod 1777 "${VIEW_COMPILED_PATH:-/tmp/laravel-views}" || true
 
-# Optional: clear stale compiled views owned by root
-rm -rf storage/framework/views/* || true
+# optional: clear stale compiled views
+rm -rf "${VIEW_COMPILED_PATH:-/tmp/laravel-views}"/* 2>/dev/null || true
 
-# Start php-fpm
+# warm caches to reduce first-hit latency
+php artisan view:clear >/dev/null 2>&1 || true
+php artisan view:cache >/dev/null 2>&1 || true
+
+# start PHP-FPM in foreground
 exec php-fpm -F
-

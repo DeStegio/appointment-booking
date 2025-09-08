@@ -2,7 +2,6 @@ services:
   app:
     build: .
     container_name: laravel-app
-    user: "33:33"   # www-data uid:gid on Debian/Alpine images
     environment:
       - VIEW_COMPILED_PATH=/tmp/laravel-views
     tmpfs:
