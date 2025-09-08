@@ -13,26 +13,35 @@ class ProviderDirectoryController extends Controller
 {
     public function index(Request $r)
     {
-        $search = (string) $r->string('q');
+        $q = trim($r->string('q')->toString());
 
         $providers = User::query()
             ->where('role', 'provider')
-            ->where('is_active', true)
-            ->when($search, function ($q) use ($search) {
-                $q->where(function ($w) use ($search) {
-                    $w->where('name', 'like', "%$search%")
-                      ->orWhere('email', 'like', "%$search%")
-                      ->orWhereHas('services', function ($qs) use ($search) {
-                          $qs->where('name', 'like', "%$search%");
-                      });
-                });
-            })
+            ->where('is_active', true);
+
+        if ($q !== '') {
+            $providers->where(function ($qq) use ($q) {
+                $qq->where('name', 'like', "%$q%")
+                   ->orWhere('email', 'like', "%$q%")
+                   ->orWhereExists(function ($sub) use ($q) {
+                       $sub->selectRaw(1)
+                           ->from('services')
+                           ->whereColumn('services.provider_id', 'users.id')
+                           ->where('services.is_active', true)
+                           ->where('services.name', 'like', "%$q%");
+                   });
+            });
+        }
+
+        $providers = $providers
             ->withCount(['services' => function ($q) { $q->where('is_active', true); }])
             ->orderBy('name')
             ->paginate(12)
             ->withQueryString();
 
-        return view('directory.providers.index', compact('providers', 'search'));
+        return view('directory.providers.index', [
+            'providers' => $providers,
+        ]);
     }
 
     public function show(User $provider, Request $r, AvailabilityService $availability)
@@ -61,6 +70,9 @@ class ProviderDirectoryController extends Controller
             $slots = $availability->getSlots($provider->id, $selectedService->id, $date);
         }
 
+        // Attach only active services to the provider relation for the view
+        $provider->setRelation('services', $services);
+
         return view('directory.providers.show', [
             'provider' => $provider,
             'services' => $services,
@@ -85,4 +97,3 @@ class ProviderDirectoryController extends Controller
         return response()->json(['date' => $date, 'slots' => $slots]);
     }
 }
-

@@ -36,21 +36,15 @@ class AppointmentController extends Controller
         return view('appointments.slots', compact('provider', 'service', 'date', 'slots'));
     }
 
-    public function store(Request $request, AvailabilityService $availability)
+    public function store(\App\Http\Requests\StoreAppointmentRequest $request, AvailabilityService $availability)
     {
+        $data = $request->validated();
 
-        $validated = $request->validate([
-            'provider_id' => ['required', 'exists:users,id'],
-            'service_id' => ['required', 'exists:services,id'],
-            'start_at' => ['required', 'date_format:Y-m-d H:i:s'],
-            'notes' => ['nullable', 'string'],
-        ]);
-
-        $service = Service::findOrFail((int) $validated['service_id']);
-        $providerId = (int) $validated['provider_id'];
+        $service = Service::findOrFail((int) $data['service_id']);
+        $providerId = (int) $data['provider_id'];
         $provider = User::findOrFail($providerId);
         $tz = config('app.timezone');
-        $startAt = Carbon::createFromFormat('Y-m-d H:i:s', $validated['start_at'], $tz);
+        $startAt = Carbon::createFromFormat('Y-m-d H:i:s', $data['start_at'], $tz);
         $duration = (int) ($service->duration_minutes ?? 30);
         if ($duration <= 0) {
             $duration = 30;
@@ -75,7 +69,7 @@ class AppointmentController extends Controller
         }
 
         try {
-            DB::transaction(function () use ($providerId, $service, $startAt, $endAt, $validated) {
+            DB::transaction(function () use ($providerId, $service, $startAt, $endAt, $data) {
                 Appointment::create([
                     'provider_id' => $providerId,
                     'customer_id' => Auth::id(),
@@ -83,7 +77,7 @@ class AppointmentController extends Controller
                     'start_at' => $startAt->format('Y-m-d H:i:s'),
                     'end_at' => $endAt->format('Y-m-d H:i:s'),
                     'status' => 'pending',
-                    'notes' => $validated['notes'] ?? null,
+                    'notes' => $data['notes'] ?? null,
                 ]);
             });
         } catch (\Illuminate\Database\QueryException $e) {
