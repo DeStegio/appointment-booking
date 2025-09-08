@@ -3,9 +3,9 @@
 @section('content')
     <h1>Find a Provider</h1>
 
-    <form method="GET" action="{{ route('providers.index') }}" style="margin: 1rem 0;">
-        <input type="text" name="q" value="{{ $search }}" placeholder="Search by name or service" style="padding:0.4rem; width: 260px;" />
-        <button type="submit" style="padding:0.45rem 0.8rem;">Search</button>
+    <form method="GET" action="{{ route('providers.index') }}" class="mb-3">
+        <input type="text" name="q" value="{{ request('q') }}" placeholder="Search by name or service">
+        <button type="submit">Search</button>
     </form>
 
     @if ($providers->count() === 0)
