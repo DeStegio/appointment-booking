@@ -38,8 +38,7 @@ return new class extends Migration
                 ->references('id')->on('services')
                 ->onDelete('restrict');
 
-            $table->unique(['provider_id', 'start_at'], 'provider_start_unique');
-            $table->index(['provider_id', 'start_at'], 'provider_start_at_index');
+            $table->unique(['provider_id', 'start_at'], 'appointments_provider_start_at_unique');
             $table->index('provider_id');
             $table->index('customer_id');
             $table->index('service_id');

@@ -63,7 +63,7 @@
                         <input type="hidden" name="service_id" value="{{ $service->id }}">
                         <input type="hidden" name="start_at" value="{{ $slot }}">
                         <span style="display:inline-block; min-width:180px;">{{ $slotStart->format('H:i') }}</span>
-                        <button type="submit" @if($isPast) disabled @endif>Book</button>
+                        <button type="submit" data-start="{{ $slot }}" @if($isPast) disabled @endif>Book</button>
                     </form>
                 </li>
             @endforeach
