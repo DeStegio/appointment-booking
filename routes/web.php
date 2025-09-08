@@ -58,6 +58,9 @@ Route::post('/appointments', [AppointmentController::class, 'store'])
 Route::middleware(['auth','role:provider'])->group(function () {
     Route::patch('/appointments/{appointment}/confirm', [AppointmentController::class, 'confirm'])->name('appointments.confirm');
     Route::patch('/appointments/{appointment}/complete', [AppointmentController::class, 'complete'])->name('appointments.complete');
+    // Provider Calendar Day View
+    Route::get('/provider/calendar', [\App\Http\Controllers\Provider\CalendarController::class, 'day'])
+        ->name('calendar.day');
 });
 // Cancel allowed for any authenticated user (policy will enforce owner rules)
 Route::middleware('auth')->group(function () {
