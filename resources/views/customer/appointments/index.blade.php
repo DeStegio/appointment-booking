@@ -11,7 +11,7 @@
 @endif
 
 <h2>Upcoming</h2>
-<table class="table">
+<div class="table-responsive"><table class="table">
     <tr>
         <th>Date/Time</th>
         <th>Provider / Service</th>
@@ -25,15 +25,15 @@
             <td>{{ ucfirst($a->status) }}</td>
             <td>
                 <div class="inline-actions">
-                <a class="btn btn-sm" href="{{ route('my.appointments.show', $a) }}">View</a>
+                <a class="btn btn-sm focus-ring" href="{{ route('my.appointments.show', $a) }}">View</a>
                 @can('reschedule', $a)
-                    <a class="btn btn-sm" href="{{ route('my.appointments.edit', $a) }}">Reschedule</a>
+                    <a class="btn btn-sm focus-ring" href="{{ route('my.appointments.edit', $a) }}">Reschedule</a>
                 @endcan
                 @can('cancel', $a)
                     <form method="POST" action="{{ route('my.appointments.cancel', $a) }}" onsubmit="return confirm('Cancel this appointment?');">
                         @csrf
                         @method('PATCH')
-                        <button type="submit" class="btn btn-danger btn-sm">Cancel</button>
+                        <button type="submit" class="btn btn-danger btn-sm focus-ring">Cancel</button>
                     </form>
                 @endcan
                 </div>
@@ -42,14 +42,14 @@
     @empty
         <tr><td colspan="4">No upcoming appointments.</td></tr>
     @endforelse
-</table>
+</table></div>
 
 <div class="mt-2">
     {{ $upcoming->withQueryString()->links() }}
     </div>
 
 <h2>Past</h2>
-<table class="table">
+<div class="table-responsive"><table class="table">
     <tr>
         <th>Date/Time</th>
         <th>Provider / Service</th>
@@ -62,13 +62,13 @@
             <td>{{ $a->provider->name ?? 'Provider #'.$a->provider_id }} — {{ $a->service->name ?? 'Service #'.$a->service_id }}</td>
             <td>{{ ucfirst($a->status) }}</td>
             <td>
-                <a href="{{ route('my.appointments.show', $a) }}">View</a>
+                <a class="btn btn-sm focus-ring" href="{{ route('my.appointments.show', $a) }}">View</a>
             </td>
         </tr>
     @empty
         <tr><td colspan="4">No past appointments.</td></tr>
     @endforelse
-</table>
+</table></div>
 <div class="mt-2">{{ $past->withQueryString()->links() }}</div>
 
 @endsection

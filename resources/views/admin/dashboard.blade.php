@@ -36,7 +36,7 @@
     </div>
 
     <div class="mt-2">
-        <a class="btn btn-sm" href="{{ route('admin.providers.index') }}">Manage Providers</a>
+        <a class="btn btn-sm focus-ring" href="{{ route('admin.providers.index') }}">Manage Providers</a>
     </div>
 </div>
 @endsection

@@ -4,7 +4,7 @@
 <div class="container">
     <div class="inline-actions">
         <h1 class="title">My Schedules</h1>
-        <a class="btn btn-primary btn-sm" href="{{ route('provider.schedules.create') }}">Create schedule</a>
+        <a class="btn btn-primary btn-sm focus-ring" href="{{ route('provider.schedules.create') }}">Create schedule</a>
     </div>
 
     @if (session('success'))
@@ -12,7 +12,7 @@
     @endif
 
     <div class="mt-2">
-        <table class="table">
+        <div class="table-responsive"><table class="table">
             <thead>
                 <tr>
                     <th>Weekday</th>
@@ -42,11 +42,11 @@
                         <td>{{ $schedule->slot_interval_minutes }}</td>
                         <td>
                             <div class="inline-actions">
-                            <a class="btn btn-sm" href="{{ route('provider.schedules.edit', $schedule) }}">Edit</a>
+                            <a class="btn btn-sm focus-ring" href="{{ route('provider.schedules.edit', $schedule) }}">Edit</a>
                             <form action="{{ route('provider.schedules.destroy', $schedule) }}" method="POST" onsubmit="return confirm('Delete this schedule?');">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                <button type="submit" class="btn btn-danger btn-sm focus-ring">Delete</button>
                             </form>
                             </div>
                         </td>
@@ -57,7 +57,7 @@
                     </tr>
                 @endforelse
             </tbody>
-        </table>
+        </table></div>
     </div>
 
     <div class="mt-2">{{ $schedules->links() }}</div>

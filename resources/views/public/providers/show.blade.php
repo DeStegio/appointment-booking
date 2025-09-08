@@ -10,7 +10,7 @@
         <p>No services available.</p>
     @else
         <div>
-            <table class="table">
+            <div class="table-responsive"><table class="table">
                 <thead>
                     <tr>
                         <th>Name</th>
@@ -29,7 +29,7 @@
                     </tr>
                 @endforeach
                 </tbody>
-            </table>
+            </table></div>
         </div>
 
         <div class="mt-2">{{ $services->links() }}</div>

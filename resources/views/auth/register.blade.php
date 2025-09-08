@@ -62,7 +62,7 @@
             @enderror
         </div>
 
-        <button type="submit" class="btn btn-primary">Register</button>
+        <button type="submit" class="btn btn-primary focus-ring">Register</button>
     </form>
 
     <p class="mt-2"><a class="link" href="{{ route('login') }}">Back to login</a></p>

@@ -4,9 +4,9 @@
 <h1 class="title">Day View — {{ $date->toDateString() }}</h1>
 
 <div class="mb-3 inline-actions">
-  <a class="btn btn-sm" href="{{ $prevUrl }}">Prev</a>
-  <a class="btn btn-sm" href="{{ $todayUrl }}">Today</a>
-  <a class="btn btn-sm" href="{{ $nextUrl }}">Next</a>
+  <a class="btn btn-sm focus-ring" href="{{ $prevUrl }}">Prev</a>
+  <a class="btn btn-sm focus-ring" href="{{ $todayUrl }}">Today</a>
+  <a class="btn btn-sm focus-ring" href="{{ $nextUrl }}">Next</a>
 </div>
 
 <form method="GET" action="{{ route('calendar.day') }}" class="mb-3">
@@ -20,7 +20,7 @@
   @if(!$services->count())
     <span class="muted">No services yet.</span>
   @endif
-  <noscript><button class="btn btn-sm" type="submit">Apply</button></noscript>
+  <noscript><button class="btn btn-sm focus-ring" type="submit">Apply</button></noscript>
   <div class="mb-2 muted">Timezone: {{ config('app.timezone') }}</div>
 </form>
 
@@ -51,11 +51,11 @@
         <div>Status: <strong>{{ $a->status }}</strong></div>
         <div class="mt-1 inline-actions">
           @if($a->status==='pending')
-            <form method="POST" action="{{ route('appointments.confirm',$a) }}">@csrf @method('PATCH') <button class="btn btn-primary btn-sm" type="submit">Confirm</button></form>
-            <form method="POST" action="{{ route('appointments.cancel',$a) }}">@csrf @method('PATCH') <button class="btn btn-danger btn-sm" type="submit">Cancel</button></form>
+            <form method="POST" action="{{ route('appointments.confirm',$a) }}">@csrf @method('PATCH') <button class="btn btn-primary btn-sm focus-ring" type="submit">Confirm</button></form>
+            <form method="POST" action="{{ route('appointments.cancel',$a) }}">@csrf @method('PATCH') <button class="btn btn-danger btn-sm focus-ring" type="submit">Cancel</button></form>
           @elseif($a->status==='confirmed')
-            <form method="POST" action="{{ route('appointments.complete',$a) }}">@csrf @method('PATCH') <button class="btn btn-primary btn-sm" type="submit">Complete</button></form>
-            <form method="POST" action="{{ route('appointments.cancel',$a) }}">@csrf @method('PATCH') <button class="btn btn-danger btn-sm" type="submit">Cancel</button></form>
+            <form method="POST" action="{{ route('appointments.complete',$a) }}">@csrf @method('PATCH') <button class="btn btn-primary btn-sm focus-ring" type="submit">Complete</button></form>
+            <form method="POST" action="{{ route('appointments.cancel',$a) }}">@csrf @method('PATCH') <button class="btn btn-danger btn-sm focus-ring" type="submit">Cancel</button></form>
           @endif
         </div>
       </div>

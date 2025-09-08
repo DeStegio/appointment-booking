@@ -15,7 +15,7 @@
         <label class="form-label" for="date">Date</label>
         <input class="form-control" type="date" id="date" name="date" value="{{ $date }}">
     </div>
-    <button class="btn btn-primary btn-sm" type="submit">Change date</button>
+    <button class="btn btn-primary btn-sm focus-ring" type="submit">Change date</button>
     <a class="link" href="{{ route('my.appointments.show', $appointment) }}">Cancel</a>
     </form>
 
@@ -37,7 +37,7 @@
                 </div>
             @endforeach
         </div>
-        <button class="btn btn-primary btn-sm" type="submit">Reschedule</button>
+        <button class="btn btn-primary btn-sm focus-ring" type="submit">Reschedule</button>
     @endif
     </form>
 

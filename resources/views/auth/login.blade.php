@@ -44,7 +44,7 @@
             @enderror
         </div>
 
-        <button type="submit" class="btn btn-primary">Login</button>
+        <button type="submit" class="btn btn-primary focus-ring">Login</button>
     </form>
 
     <p class="mt-2"><a class="link" href="{{ route('register.show') }}">Create an account</a></p>

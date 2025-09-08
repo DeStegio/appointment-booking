@@ -16,8 +16,8 @@
         <p>Your role: <code>{{ $user->role ?? 'n/a' }}</code></p>
         @if (($user->role ?? null) === 'provider')
             <div class="inline-actions mt-1">
-                <a class="btn btn-sm" href="{{ route('provider.services.index') }}">Services</a>
-                <a class="btn btn-sm" href="{{ route('provider.schedules.index') }}">My Schedules</a>
+                <a class="btn btn-sm focus-ring" href="{{ route('provider.services.index') }}">Services</a>
+                <a class="btn btn-sm focus-ring" href="{{ route('provider.schedules.index') }}">My Schedules</a>
             </div>
         @endif
     </div>
@@ -40,7 +40,7 @@
         @if ($appointments->isEmpty())
             <p>No upcoming appointments.</p>
         @else
-            <table class="table">
+            <div class="table-responsive"><table class="table">
                 <tr>
                     <th>Start</th>
                     <th>Provider</th>
@@ -70,7 +70,7 @@
                                 <form method="POST" action="{{ route('appointments.cancel', $appt) }}" class="inline-actions">
                                     @csrf
                                     @method('PATCH')
-                                    <button type="submit" class="btn btn-danger btn-sm">Cancel</button>
+                                    <button type="submit" class="btn btn-danger btn-sm focus-ring">Cancel</button>
                                 </form>
                             @else
                                 <span class="badge">—</span>
@@ -78,7 +78,7 @@
                         </td>
                     </tr>
                 @endforeach
-            </table>
+            </table></div>
         @endif
     @endif
 
@@ -95,7 +95,7 @@
         @if ($appointments->isEmpty())
             <p>No upcoming appointments.</p>
         @else
-            <table class="table">
+            <div class="table-responsive"><table class="table">
                 <tr>
                     <th>Start</th>
                     <th>Customer</th>
@@ -126,23 +126,23 @@
                                 <form method="POST" action="{{ route('appointments.confirm', $appt) }}" class="inline-actions">
                                     @csrf
                                     @method('PATCH')
-                                    <button type="submit" class="btn btn-primary btn-sm">Confirm</button>
+                                    <button type="submit" class="btn btn-primary btn-sm focus-ring">Confirm</button>
                                 </form>
                                 <form method="POST" action="{{ route('appointments.cancel', $appt) }}" class="inline-actions">
                                     @csrf
                                     @method('PATCH')
-                                    <button type="submit" class="btn btn-danger btn-sm">Cancel</button>
+                                    <button type="submit" class="btn btn-danger btn-sm focus-ring">Cancel</button>
                                 </form>
                             @elseif ((int) $appt->provider_id === (int) ($user->id ?? 0) && $status === 'confirmed')
                                 <form method="POST" action="{{ route('appointments.complete', $appt) }}" class="inline-actions">
                                     @csrf
                                     @method('PATCH')
-                                    <button type="submit" class="btn btn-primary btn-sm">Complete</button>
+                                    <button type="submit" class="btn btn-primary btn-sm focus-ring">Complete</button>
                                 </form>
                                 <form method="POST" action="{{ route('appointments.cancel', $appt) }}" class="inline-actions">
                                     @csrf
                                     @method('PATCH')
-                                    <button type="submit" class="btn btn-danger btn-sm">Cancel</button>
+                                    <button type="submit" class="btn btn-danger btn-sm focus-ring">Cancel</button>
                                 </form>
                             @else
                                 <span class="badge">—</span>
@@ -150,7 +150,7 @@
                         </td>
                     </tr>
                 @endforeach
-            </table>
+            </table></div>
         @endif
     @endif
 </div>

@@ -35,7 +35,7 @@
                min="{{ $minDate->toDateString() }}"
                max="{{ $maxDate->toDateString() }}"
                value="{{ $selectedDate }}" required>
-        <button type="submit" class="btn btn-primary btn-sm">Check</button>
+        <button type="submit" class="btn btn-primary btn-sm focus-ring">Check</button>
     </form>
 
     @error('date')
@@ -59,7 +59,7 @@
                         <input type="hidden" name="service_id" value="{{ $service->id }}">
                         <input type="hidden" name="start_at" value="{{ $slot }}">
                         <span>{{ $slotStart->format('H:i') }}</span>
-                        <button class="btn btn-primary btn-sm" type="submit" data-start="{{ $slot }}" @if($isPast) disabled @endif>Book</button>
+                        <button class="btn btn-primary btn-sm focus-ring" type="submit" data-start="{{ $slot }}" @if($isPast) disabled @endif>Book</button>
                     </form>
                 </li>
             @endforeach

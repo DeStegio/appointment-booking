@@ -17,15 +17,15 @@
 <p><strong>Status:</strong> {{ ucfirst($appointment->status) }}</p>
 
 <p class="inline-actions">
-    <a class="btn btn-sm" href="{{ route('my.appointments.index') }}">Back to list</a>
+    <a class="btn btn-sm focus-ring" href="{{ route('my.appointments.index') }}">Back to list</a>
     @can('reschedule', $appointment)
-        <a class="btn btn-sm" href="{{ route('my.appointments.edit', $appointment) }}">Reschedule</a>
+        <a class="btn btn-sm focus-ring" href="{{ route('my.appointments.edit', $appointment) }}">Reschedule</a>
     @endcan
     @can('cancel', $appointment)
         <form method="POST" action="{{ route('my.appointments.cancel', $appointment) }}" onsubmit="return confirm('Cancel this appointment?');">
             @csrf
             @method('PATCH')
-            <button type="submit" class="btn btn-danger btn-sm">Cancel</button>
+            <button type="submit" class="btn btn-danger btn-sm focus-ring">Cancel</button>
         </form>
     @endcan
     </p>
