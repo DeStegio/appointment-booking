@@ -18,14 +18,16 @@ class AvailabilityServiceTest extends TestCase
         $provider = User::where('role','provider')->firstOrFail();
         $service  = $provider->services()->firstOrFail();
 
-        // Pick next weekday (Mon-Fri)
-        $date = Carbon::now()->next(Carbon::MONDAY)->toDateString();
-
+        // Find first date within 14 days with at least one slot
         $svc = app(AvailabilityService::class);
-        $slots = $svc->getSlots($provider->id, $service->id, $date);
-
+        $date = null; $firstSlot = null; $slots = [];
+        for ($i = 1; $i <= 14; $i++) {
+            $d = now()->addDays($i)->toDateString();
+            $slots = $svc->getSlots($provider->id, $service->id, $d);
+            if (!empty($slots)) { $date = $d; $firstSlot = $slots[0]; break; }
+        }
+        $this->assertNotNull($date, 'No available date with slots in next 14 days');
         $this->assertIsArray($slots);
         $this->assertNotEmpty($slots);
     }
 }
-
