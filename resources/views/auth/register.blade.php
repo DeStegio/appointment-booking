@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container" style="max-width:520px;margin:0 auto;">
-    <h1 style="margin-bottom:1rem;">Register</h1>
+<div class="container">
+    <h1 class="title mb-2">Register</h1>
 
     @if ($errors->any())
-        <div style="background:#ffe6e6;border:1px solid #ffb3b3;padding:0.75rem 1rem;margin-bottom:1rem;">
+        <div class="card mb-2">
             <strong>There were some problems with your input:</strong>
-            <ul style="margin:0.5rem 0 0 1.25rem;">
+            <ul class="mt-1">
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
                 @endforeach
@@ -15,59 +15,56 @@
         </div>
     @endif
 
-    <form method="POST" action="{{ route('register.store') }}" style="display:block;">
+    <form method="POST" action="{{ route('register.store') }}">
         @csrf
 
-        <div style="margin-bottom:0.75rem;">
-            <label for="name" style="display:block;margin-bottom:0.25rem;">Name</label>
-            <input id="name" type="text" name="name" value="{{ old('name') }}" required style="width:100%;padding:0.5rem;border:1px solid #ccc;border-radius:4px;" />
+        <div class="form-group">
+            <label class="form-label" for="name">Name</label>
+            <input class="form-control" id="name" type="text" name="name" value="{{ old('name') }}" required />
             @error('name')
-                <div style="color:#b00020;margin-top:0.25rem;">{{ $message }}</div>
+                <div class="badge badge-danger mt-1">{{ $message }}</div>
             @enderror
         </div>
 
-        <div style="margin-bottom:0.75rem;">
-            <label for="email" style="display:block;margin-bottom:0.25rem;">Email</label>
-            <input id="email" type="email" name="email" value="{{ old('email') }}" required style="width:100%;padding:0.5rem;border:1px solid #ccc;border-radius:4px;" />
+        <div class="form-group">
+            <label class="form-label" for="email">Email</label>
+            <input class="form-control" id="email" type="email" name="email" value="{{ old('email') }}" required />
             @error('email')
-                <div style="color:#b00020;margin-top:0.25rem;">{{ $message }}</div>
+                <div class="badge badge-danger mt-1">{{ $message }}</div>
             @enderror
         </div>
 
-        <div style="margin-bottom:0.75rem;">
-            <label for="password" style="display:block;margin-bottom:0.25rem;">Password</label>
-            <input id="password" type="password" name="password" required style="width:100%;padding:0.5rem;border:1px solid #ccc;border-radius:4px;" />
+        <div class="form-group">
+            <label class="form-label" for="password">Password</label>
+            <input class="form-control" id="password" type="password" name="password" required />
             @error('password')
-                <div style="color:#b00020;margin-top:0.25rem;">{{ $message }}</div>
+                <div class="badge badge-danger mt-1">{{ $message }}</div>
             @enderror
         </div>
 
-        <div style="margin-bottom:0.75rem;">
-            <label for="password_confirmation" style="display:block;margin-bottom:0.25rem;">Confirm Password</label>
-            <input id="password_confirmation" type="password" name="password_confirmation" required style="width:100%;padding:0.5rem;border:1px solid #ccc;border-radius:4px;" />
+        <div class="form-group">
+            <label class="form-label" for="password_confirmation">Confirm Password</label>
+            <input class="form-control" id="password_confirmation" type="password" name="password_confirmation" required />
             @error('password_confirmation')
-                <div style="color:#b00020;margin-top:0.25rem;">{{ $message }}</div>
+                <div class="badge badge-danger mt-1">{{ $message }}</div>
             @enderror
         </div>
 
-        <div style="margin-bottom:1rem;">
-            <label for="role" style="display:block;margin-bottom:0.25rem;">Role</label>
-            <select id="role" name="role" style="width:100%;padding:0.5rem;border:1px solid #ccc;border-radius:4px;">
+        <div class="form-group">
+            <label class="form-label" for="role">Role</label>
+            <select class="form-select" id="role" name="role">
                 <option value="customer" {{ old('role', 'customer') === 'customer' ? 'selected' : '' }}>customer</option>
                 <option value="provider" {{ old('role') === 'provider' ? 'selected' : '' }}>provider</option>
                 <option value="admin" {{ old('role') === 'admin' ? 'selected' : '' }}>admin</option>
             </select>
             @error('role')
-                <div style="color:#b00020;margin-top:0.25rem;">{{ $message }}</div>
+                <div class="badge badge-danger mt-1">{{ $message }}</div>
             @enderror
         </div>
 
-        <button type="submit" style="padding:0.5rem 0.75rem;border:1px solid #198754;background:#198754;color:#fff;border-radius:4px;">Register</button>
+        <button type="submit" class="btn btn-primary">Register</button>
     </form>
 
-    <p style="margin-top:1rem;">
-        <a href="{{ route('login') }}">Back to login</a>
-    </p>
+    <p class="mt-2"><a class="link" href="{{ route('login') }}">Back to login</a></p>
 </div>
 @endsection
-

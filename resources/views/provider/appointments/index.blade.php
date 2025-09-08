@@ -1,19 +1,17 @@
 @extends('layouts.app')
 
 @section('content')
-<h1>Appointments</h1>
+<h1 class="title">Appointments</h1>
 
 @if (session('status'))
-    <div style="padding:8px;background:#d1e7dd;color:#0f5132;margin-bottom:12px;">{{ session('status') }}</div>
+    <div class="card mb-2">{{ session('status') }}</div>
 @endif
 @if ($errors->any())
-    <div style="padding:8px;background:#f8d7da;color:#842029;margin-bottom:12px;">
-        {{ $errors->first() }}
-    </div>
+    <div class="card mb-2">{{ $errors->first() }}</div>
 @endif
 
 <h2>Today</h2>
-<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;width:100%;">
+<table class="table">
     <tr>
         <th>Time</th>
         <th>Customer</th>
@@ -29,21 +27,21 @@
             <td>{{ ucfirst($a->status) }}</td>
             <td>
                 @can('confirm', $a)
-                    <form method="POST" action="{{ route('appointments.confirm', $a) }}" class="inline">
+                    <form method="POST" action="{{ route('appointments.confirm', $a) }}" class="inline-actions">
                         @csrf @method('PATCH')
-                        <button type="submit">Confirm</button>
+                        <button type="submit" class="btn btn-primary btn-sm">Confirm</button>
                     </form>
                 @endcan
                 @can('complete', $a)
-                    <form method="POST" action="{{ route('appointments.complete', $a) }}" class="inline">
+                    <form method="POST" action="{{ route('appointments.complete', $a) }}" class="inline-actions">
                         @csrf @method('PATCH')
-                        <button type="submit">Complete</button>
+                        <button type="submit" class="btn btn-primary btn-sm">Complete</button>
                     </form>
                 @endcan
                 @can('cancel', $a)
-                    <form method="POST" action="{{ route('appointments.cancel', $a) }}" class="inline" onsubmit="return confirm('Cancel this appointment?');">
+                    <form method="POST" action="{{ route('appointments.cancel', $a) }}" class="inline-actions" onsubmit="return confirm('Cancel this appointment?');">
                         @csrf @method('PATCH')
-                        <button type="submit" class="linky">Cancel</button>
+                        <button type="submit" class="btn btn-danger btn-sm">Cancel</button>
                     </form>
                 @endcan
             </td>
@@ -53,10 +51,10 @@
     @endforelse
 </table>
 
-<h2 style="margin-top:20px;">Upcoming</h2>
+<h2 class="title mt-2">Upcoming</h2>
 @forelse ($upcoming as $date => $items)
     <h3>{{ $date }}</h3>
-    <table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;width:100%;margin-bottom:10px;">
+    <table class="table">
         <tr>
             <th>Time</th>
             <th>Customer</th>
@@ -72,21 +70,21 @@
             <td>{{ ucfirst($a->status) }}</td>
             <td>
                 @can('confirm', $a)
-                    <form method="POST" action="{{ route('appointments.confirm', $a) }}" class="inline">
+                    <form method="POST" action="{{ route('appointments.confirm', $a) }}" class="inline-actions">
                         @csrf @method('PATCH')
-                        <button type="submit">Confirm</button>
+                        <button type="submit" class="btn btn-primary btn-sm">Confirm</button>
                     </form>
                 @endcan
                 @can('complete', $a)
-                    <form method="POST" action="{{ route('appointments.complete', $a) }}" class="inline">
+                    <form method="POST" action="{{ route('appointments.complete', $a) }}" class="inline-actions">
                         @csrf @method('PATCH')
-                        <button type="submit">Complete</button>
+                        <button type="submit" class="btn btn-primary btn-sm">Complete</button>
                     </form>
                 @endcan
                 @can('cancel', $a)
-                    <form method="POST" action="{{ route('appointments.cancel', $a) }}" class="inline" onsubmit="return confirm('Cancel this appointment?');">
+                    <form method="POST" action="{{ route('appointments.cancel', $a) }}" class="inline-actions" onsubmit="return confirm('Cancel this appointment?');">
                         @csrf @method('PATCH')
-                        <button type="submit" class="linky">Cancel</button>
+                        <button type="submit" class="btn btn-danger btn-sm">Cancel</button>
                     </form>
                 @endcan
             </td>
@@ -98,4 +96,3 @@
 @endforelse
 
 @endsection
-

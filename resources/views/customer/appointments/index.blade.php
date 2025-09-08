@@ -1,19 +1,17 @@
 @extends('layouts.app')
 
 @section('content')
-<h1>My Appointments</h1>
+<h1 class="title">My Appointments</h1>
 
 @if (session('status'))
-    <div style="padding:8px;background:#d1e7dd;color:#0f5132;margin-bottom:12px;">{{ session('status') }}</div>
+    <div class="card mb-2">{{ session('status') }}</div>
 @endif
 @if ($errors->any())
-    <div style="padding:8px;background:#f8d7da;color:#842029;margin-bottom:12px;">
-        {{ $errors->first() }}
-    </div>
+    <div class="card mb-2">{{ $errors->first() }}</div>
 @endif
 
 <h2>Upcoming</h2>
-<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;width:100%;">
+<table class="table">
     <tr>
         <th>Date/Time</th>
         <th>Provider / Service</th>
@@ -26,17 +24,19 @@
             <td>{{ $a->provider->name ?? 'Provider #'.$a->provider_id }} — {{ $a->service->name ?? 'Service #'.$a->service_id }}</td>
             <td>{{ ucfirst($a->status) }}</td>
             <td>
-                <a href="{{ route('my.appointments.show', $a) }}">View</a>
+                <div class="inline-actions">
+                <a class="btn btn-sm" href="{{ route('my.appointments.show', $a) }}">View</a>
                 @can('reschedule', $a)
-                    | <a href="{{ route('my.appointments.edit', $a) }}">Reschedule</a>
+                    <a class="btn btn-sm" href="{{ route('my.appointments.edit', $a) }}">Reschedule</a>
                 @endcan
                 @can('cancel', $a)
-                    | <form method="POST" action="{{ route('my.appointments.cancel', $a) }}" class="inline" onsubmit="return confirm('Cancel this appointment?');">
+                    <form method="POST" action="{{ route('my.appointments.cancel', $a) }}" onsubmit="return confirm('Cancel this appointment?');">
                         @csrf
                         @method('PATCH')
-                        <button type="submit" class="linky">Cancel</button>
+                        <button type="submit" class="btn btn-danger btn-sm">Cancel</button>
                     </form>
                 @endcan
+                </div>
             </td>
         </tr>
     @empty
@@ -44,12 +44,12 @@
     @endforelse
 </table>
 
-<div style="margin:8px 0;">
+<div class="mt-2">
     {{ $upcoming->withQueryString()->links() }}
     </div>
 
 <h2>Past</h2>
-<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;width:100%;">
+<table class="table">
     <tr>
         <th>Date/Time</th>
         <th>Provider / Service</th>
@@ -69,9 +69,6 @@
         <tr><td colspan="4">No past appointments.</td></tr>
     @endforelse
 </table>
-<div style="margin:8px 0;">
-    {{ $past->withQueryString()->links() }}
-</div>
+<div class="mt-2">{{ $past->withQueryString()->links() }}</div>
 
 @endsection
-

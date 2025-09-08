@@ -1,31 +1,28 @@
 @extends('layouts.app')
 
 @section('content')
-    <h1>Providers</h1>
+    <h1 class="title">Providers</h1>
 
-    <form method="GET" action="{{ route('providers.index') }}" style="margin: 1rem 0;">
-        <input type="text" name="q" value="{{ $q }}" placeholder="Search by name/email" style="padding:0.4rem; width: 260px;" />
-        <button type="submit" style="padding:0.45rem 0.8rem;">Search</button>
+    <form method="GET" action="{{ route('providers.index') }}" class="mb-2 inline-actions">
+        <input class="form-control" type="text" name="q" value="{{ $q }}" placeholder="Search by name/email" />
+        <button class="btn btn-primary btn-sm" type="submit">Search</button>
     </form>
 
     @if ($providers->count() === 0)
         <p>No providers found.</p>
     @else
-        <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 0.75rem;">
+        <div class="grid">
             @foreach ($providers as $provider)
-                <div style="border:1px solid #eee; border-radius:6px; padding:0.75rem;">
-                    <div style="font-weight:600;">{{ $provider->name }}</div>
-                    <div style="color:#6c757d;">{{ $provider->email }}</div>
-                    <div style="margin-top:0.5rem;">
-                        <a href="{{ route('providers.show', $provider) }}">View profile</a>
+                <div class="card">
+                    <h3>{{ $provider->name }}</h3>
+                    <div class="muted">{{ $provider->email }}</div>
+                    <div class="mt-2">
+                        <a class="link" href="{{ route('providers.show', $provider) }}">View profile</a>
                     </div>
                 </div>
             @endforeach
         </div>
 
-        <div style="margin-top:1rem;">
-            {{ $providers->links() }}
-        </div>
+        <div class="mt-2">{{ $providers->links() }}</div>
     @endif
 @endsection
-

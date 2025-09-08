@@ -36,7 +36,7 @@
                 <td>
                     <a href="{{ route('provider.services.edit', $service) }}">Edit</a>
 
-                    <form action="{{ route('provider.services.destroy', $service) }}" method="POST" style="display:inline" onsubmit="return confirm('Delete this service?');">
+                    <form action="{{ route('provider.services.destroy', $service) }}" method="POST" onsubmit="return confirm('Delete this service?');">
                         @csrf
                         @method('DELETE')
                         <button type="submit">Delete</button>
@@ -56,4 +56,3 @@
     </div>
 </body>
 </html>
-
