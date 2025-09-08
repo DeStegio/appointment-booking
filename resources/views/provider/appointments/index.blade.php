@@ -11,7 +11,7 @@
 @endif
 
 <h2>Today</h2>
-<table class="table">
+<div class="table-responsive"><table class="table">
     <tr>
         <th>Time</th>
         <th>Customer</th>
@@ -29,19 +29,19 @@
                 @can('confirm', $a)
                     <form method="POST" action="{{ route('appointments.confirm', $a) }}" class="inline-actions">
                         @csrf @method('PATCH')
-                        <button type="submit" class="btn btn-primary btn-sm">Confirm</button>
+                        <button type="submit" class="btn btn-primary btn-sm focus-ring">Confirm</button>
                     </form>
                 @endcan
                 @can('complete', $a)
                     <form method="POST" action="{{ route('appointments.complete', $a) }}" class="inline-actions">
                         @csrf @method('PATCH')
-                        <button type="submit" class="btn btn-primary btn-sm">Complete</button>
+                        <button type="submit" class="btn btn-primary btn-sm focus-ring">Complete</button>
                     </form>
                 @endcan
                 @can('cancel', $a)
                     <form method="POST" action="{{ route('appointments.cancel', $a) }}" class="inline-actions" onsubmit="return confirm('Cancel this appointment?');">
                         @csrf @method('PATCH')
-                        <button type="submit" class="btn btn-danger btn-sm">Cancel</button>
+                        <button type="submit" class="btn btn-danger btn-sm focus-ring">Cancel</button>
                     </form>
                 @endcan
             </td>
@@ -49,12 +49,12 @@
     @empty
         <tr><td colspan="5">No appointments today.</td></tr>
     @endforelse
-</table>
+</table></div>
 
 <h2 class="title mt-2">Upcoming</h2>
 @forelse ($upcoming as $date => $items)
     <h3>{{ $date }}</h3>
-    <table class="table">
+    <div class="table-responsive"><table class="table">
         <tr>
             <th>Time</th>
             <th>Customer</th>
@@ -72,25 +72,25 @@
                 @can('confirm', $a)
                     <form method="POST" action="{{ route('appointments.confirm', $a) }}" class="inline-actions">
                         @csrf @method('PATCH')
-                        <button type="submit" class="btn btn-primary btn-sm">Confirm</button>
+                        <button type="submit" class="btn btn-primary btn-sm focus-ring">Confirm</button>
                     </form>
                 @endcan
                 @can('complete', $a)
                     <form method="POST" action="{{ route('appointments.complete', $a) }}" class="inline-actions">
                         @csrf @method('PATCH')
-                        <button type="submit" class="btn btn-primary btn-sm">Complete</button>
+                        <button type="submit" class="btn btn-primary btn-sm focus-ring">Complete</button>
                     </form>
                 @endcan
                 @can('cancel', $a)
                     <form method="POST" action="{{ route('appointments.cancel', $a) }}" class="inline-actions" onsubmit="return confirm('Cancel this appointment?');">
                         @csrf @method('PATCH')
-                        <button type="submit" class="btn btn-danger btn-sm">Cancel</button>
+                        <button type="submit" class="btn btn-danger btn-sm focus-ring">Cancel</button>
                     </form>
                 @endcan
             </td>
         </tr>
         @endforeach
-    </table>
+    </table></div>
 @empty
     <p>No upcoming appointments.</p>
 @endforelse

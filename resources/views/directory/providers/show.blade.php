@@ -27,7 +27,7 @@
         <input id="day" type="date" class="form-control" min="{{ now()->toDateString() }}">
       </div>
       <div class="inline-actions">
-        <button id="loadSlots" class="btn btn-primary btn-sm">Find slots</button>
+        <button id="loadSlots" class="btn btn-primary btn-sm focus-ring">Find slots</button>
       </div>
     </div>
 
@@ -81,7 +81,7 @@
     items.forEach(t => {
       const btn = document.createElement('button');
       btn.type = 'button';
-      btn.className = 'slot-btn';
+      btn.className = 'slot-btn focus-ring';
       const rawLabel = typeof t === 'string' ? t : (t.label || t.value || t.start_at || t.iso || '');
       // Prefer showing HH:mm for clarity if we have a full timestamp
       if (typeof rawLabel === 'string' && /^\d{4}-\d{2}-\d{2}[ T]\d{2}:\d{2}/.test(rawLabel)) {

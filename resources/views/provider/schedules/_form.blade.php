@@ -54,7 +54,7 @@
 </div>
 
 <div class="inline-actions mt-2">
-    <button type="submit" class="btn btn-primary btn-sm">{{ $buttonText ?? 'Save' }}</button>
+    <button type="submit" class="btn btn-primary btn-sm focus-ring">{{ $buttonText ?? 'Save' }}</button>
     <a class="link" href="{{ route('provider.schedules.index') }}">Cancel</a>
     @csrf
     @isset($method)

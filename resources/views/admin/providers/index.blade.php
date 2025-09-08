@@ -10,11 +10,11 @@
 
     <form method="GET" action="{{ route('admin.providers.index') }}" class="mb-2 inline-actions">
         <input class="form-control" type="text" name="q" value="{{ $q }}" placeholder="Search name or email">
-        <button class="btn btn-primary btn-sm" type="submit">Search</button>
+        <button class="btn btn-primary btn-sm focus-ring" type="submit">Search</button>
     </form>
 
     <div>
-        <table class="table">
+        <div class="table-responsive"><table class="table">
             <tr>
                 <th>Name</th>
                 <th>Email</th>
@@ -36,14 +36,14 @@
                         <form method="POST" action="{{ route('admin.providers.toggle', $p) }}" class="inline-actions">
                             @csrf
                             @method('PATCH')
-                            <button class="btn btn-sm" type="submit">{{ $active ? 'Disable' : 'Enable' }}</button>
+                            <button class="btn btn-sm focus-ring" type="submit">{{ $active ? 'Disable' : 'Enable' }}</button>
                         </form>
                     </td>
                 </tr>
             @empty
                 <tr><td colspan="4" class="muted">No providers found.</td></tr>
             @endforelse
-        </table>
+        </table></div>
     </div>
 
     <div class="mt-2">{{ $providers->links() }}</div>

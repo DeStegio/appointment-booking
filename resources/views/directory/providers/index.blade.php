@@ -5,7 +5,7 @@
 
     <form method="GET" action="{{ route('providers.index') }}" class="mb-2 inline-actions">
         <input class="form-control" type="text" name="q" value="{{ request('q') }}" placeholder="Search by name or service">
-        <button type="submit" class="btn btn-primary btn-sm">Search</button>
+        <button type="submit" class="btn btn-primary btn-sm focus-ring">Search</button>
     </form>
 
     @if ($providers->count() === 0)

@@ -69,3 +69,75 @@ a.link:hover{text-decoration:underline}
 .mb-1{margin-bottom:6px}.mb-2{margin-bottom:12px}.mb-3{margin-bottom:18px}
 .mx-1{margin-inline:6px}.mx-2{margin-inline:12px}
 .p-1{padding:6px}.p-2{padding:12px}.p-3{padding:18px}
+
+/* --- Theming ------------------------------------------------------------ */
+:root{
+  --bg:#ffffff; --text:#111827; --muted:#6b7280; --primary:#2563eb;
+  --primary-contrast:#ffffff; --border:#e5e7eb; --card:#fafafa;
+  --danger:#dc2626; --success:#16a34a; --warning:#d97706;
+  --ring:#3b82f6;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0b0f17; --text:#e5e7eb; --muted:#9aa4b2; --primary:#3b82f6;
+    --primary-contrast:#0b0f17; --border:#1f2937; --card:#111827;
+    --danger:#ef4444; --success:#22c55e; --warning:#f59e0b; --ring:#60a5fa;
+  }
+}
+/* explicit opt-in to dark via class on <html> */
+.theme-dark{
+  --bg:#0b0f17; --text:#e5e7eb; --muted:#9aa4b2; --primary:#3b82f6;
+  --primary-contrast:#0b0f17; --border:#1f2937; --card:#111827;
+  --danger:#ef4444; --success:#22c55e; --warning:#f59e0b; --ring:#60a5fa;
+}
+/* explicit opt-in to light via class on <html> */
+.theme-light{
+  --bg:#ffffff; --text:#111827; --muted:#6b7280; --primary:#2563eb;
+  --primary-contrast:#ffffff; --border:#e5e7eb; --card:#fafafa;
+  --danger:#dc2626; --success:#16a34a; --warning:#d97706; --ring:#3b82f6;
+}
+
+/* --- Header / Nav ------------------------------------------------------- */
+.navbar{background:var(--card);border-bottom:1px solid var(--border)}
+.navbar .inner{max-width:1000px;margin:0 auto;padding:12px 24px;display:flex;gap:12px;align-items:center;justify-content:space-between}
+.brand{font-weight:800}
+.nav{display:flex;gap:12px;align-items:center}
+.nav a{color:inherit;text-decoration:none;padding:6px 8px;border-radius:8px}
+.nav a:hover{background:rgba(0,0,0,.04)}
+.theme-dark .nav a:hover{background:rgba(255,255,255,.06)}
+
+/* --- Focus states ------------------------------------------------------- */
+:where(a,button,.btn,.form-control,.form-select).focus-ring,
+:where(a,button,.btn,.form-control,.form-select):focus-visible{
+  outline:2px solid var(--ring);
+  outline-offset:2px;
+  box-shadow:0 0 0 4px color-mix(in oklab, var(--ring) 30%, transparent);
+}
+
+/* --- Buttons refinements ------------------------------------------------ */
+.btn{transition:transform .04s ease, box-shadow .12s ease}
+.btn:active{transform:translateY(1px)}
+.btn[disabled], .btn.is-disabled{opacity:.55;pointer-events:none}
+
+/* --- Table responsiveness ---------------------------------------------- */
+.table-responsive{width:100%;overflow:auto;border:1px solid var(--border);border-radius:12px}
+.table{min-width:680px}
+
+/* --- Alerts / flash messages ------------------------------------------- */
+.alert{padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:var(--card);margin:12px 0}
+.alert-success{border-color:var(--success);color:var(--success)}
+.alert-danger{border-color:var(--danger);color:var(--danger)}
+.alert-warning{border-color:var(--warning);color:var(--warning)}
+
+/* --- Animations with reduced-motion safe guards ------------------------ */
+@media (prefers-reduced-motion:no-preference){
+  .fade-in{animation:fade-in .18s ease-out both}
+}
+@keyframes fade-in{from{opacity:0;transform:translateY(2px)} to{opacity:1;transform:none}}
+
+/* --- Small utilities ---------------------------------------------------- */
+.hidden{display:none !important}
+.flex{display:flex}.items-center{align-items:center}.justify-between{justify-content:space-between}.gap-2{gap:8px}
+.w-full{width:100%}
+.text-muted{color:var(--muted)}
+/* END additions */
