@@ -1,18 +1,18 @@
 @extends('layouts.app')
 @section('content')
 <div class="container">
-  <h1 class="mb-2">{{ $provider->name }}</h1>
-  <p class="text-muted mb-4">{{ $provider->email }}</p>
+  <h1 class="title mb-1">{{ $provider->name }}</h1>
+  <p class="muted mb-3">{{ $provider->email }}</p>
 
   @if($provider->services->isEmpty())
     <p>No active services yet.</p>
     <p><a href="{{ route('providers.index') }}">&larr; Back to providers</a></p>
   @else
-  <div class="card p-3 mb-4">
-    <h2 class="h5">Book an appointment</h2>
-    <div class="row g-2 align-items-end">
-      <div class="col-md-5">
-        <label class="form-label">Service</label>
+  <div class="card p-2 mb-3">
+    <h2 class="title">Book an appointment</h2>
+    <div>
+      <div class="form-group">
+        <label class="form-label" for="svc">Service</label>
         <select id="svc" class="form-select">
           @foreach($provider->services as $s)
             <option value="{{ $s->id }}"
@@ -22,27 +22,27 @@
           @endforeach
         </select>
       </div>
-      <div class="col-md-4">
-        <label class="form-label">Date</label>
+      <div class="form-group">
+        <label class="form-label" for="day">Date</label>
         <input id="day" type="date" class="form-control" min="{{ now()->toDateString() }}">
       </div>
-      <div class="col-md-3">
-        <button id="loadSlots" class="btn btn-primary w-100">Find slots</button>
+      <div class="inline-actions">
+        <button id="loadSlots" class="btn btn-primary btn-sm">Find slots</button>
       </div>
     </div>
 
-    <div id="slots" class="mt-3"></div>
+    <div id="slots" class="slots mt-2"></div>
   </div>
   @endif
 
-  <h2 class="h5 mb-2">Active services</h2>
-  <ul>
+  <h2 class="title mb-1">Active services</h2>
+  <ul class="mt-2">
     @foreach($provider->services as $s)
       <li>{{ $s->name }} &mdash; {{ $s->duration_minutes }}' @if(!is_null($s->price)) &mdash; &euro;{{ number_format($s->price,2) }} @endif</li>
     @endforeach
   </ul>
 
-  <p class="mt-4"><a href="{{ route('providers.index') }}">&larr; Back to providers</a></p>
+  <p class="mt-3"><a class="link" href="{{ route('providers.index') }}">&larr; Back to providers</a></p>
 </div>
 
 @php
@@ -71,17 +71,17 @@
 
   function renderSlots(items) {
     if (!items || !items.length) {
-      slotsDiv.innerHTML = '<p class="text-muted">No available slots for this day.</p>';
+      slotsDiv.innerHTML = '<p class="muted">No available slots for this day.</p>';
       return;
     }
     const serviceId = svcSel.value;
-    slotsDiv.innerHTML = '<div class="d-flex flex-wrap gap-2"></div>';
+    slotsDiv.innerHTML = '<div class="slots"></div>';
     const wrap = slotsDiv.firstElementChild;
 
     items.forEach(t => {
       const btn = document.createElement('button');
       btn.type = 'button';
-      btn.className = 'btn btn-outline-primary';
+      btn.className = 'slot-btn';
       const rawLabel = typeof t === 'string' ? t : (t.label || t.value || t.start_at || t.iso || '');
       // Prefer showing HH:mm for clarity if we have a full timestamp
       if (typeof rawLabel === 'string' && /^\d{4}-\d{2}-\d{2}[ T]\d{2}:\d{2}/.test(rawLabel)) {
@@ -130,13 +130,13 @@
   loadBtn.addEventListener('click', async () => {
     const url = currentSlotsUrl();
     if (!url) { alert('Pick a date first'); return; }
-    slotsDiv.innerHTML = '<p class="text-muted">Loading...</p>';
+    slotsDiv.innerHTML = '<p class="muted">Loading...</p>';
     try {
       const r = await fetch(url, {headers:{'Accept':'application/json'}});
       const data = await r.json();
       renderSlots(data.slots || data || []);
     } catch(e) {
-      slotsDiv.innerHTML = '<p class="text-danger">Failed to load slots.</p>';
+      slotsDiv.innerHTML = '<p class="badge badge-danger">Failed to load slots.</p>';
     }
   });
 })();

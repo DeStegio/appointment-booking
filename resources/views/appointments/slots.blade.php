@@ -1,18 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
-<div style="max-width:720px;margin:0 auto;">
-    <h1 style="margin-bottom:0.5rem;">Available Slots</h1>
+<div class="container">
+    <h1 class="title mb-1">Available Slots</h1>
 
     @if (session('status'))
-        <div style="padding:8px 10px;margin:10px 0;border:1px solid #b2dfdb;background:#e0f2f1;color:#004d40;">
-            {{ session('status') }}
-        </div>
+        <div class="card mt-2">{{ session('status') }}</div>
     @endif
     @if ($errors->any())
-        <div style="padding:8px 10px;margin:10px 0;border:1px solid #ffcdd2;background:#ffebee;color:#b71c1c;">
-            {{ $errors->first() }}
-        </div>
+        <div class="card mt-2">{{ $errors->first() }}</div>
     @endif
 
     <p>
@@ -33,37 +29,37 @@
         $selectedDate = old('date', $date ?? $today->toDateString());
     @endphp
 
-    <form method="GET" action="{{ route('appointments.slots', ['provider' => $provider->id, 'service' => $service->id]) }}" style="margin-bottom:1rem;">
-        <label for="date">Date:</label>
-        <input type="date" id="date" name="date"
+    <form method="GET" action="{{ route('appointments.slots', ['provider' => $provider->id, 'service' => $service->id]) }}" class="mb-2 inline-actions">
+        <label class="form-label" for="date">Date</label>
+        <input class="form-control" type="date" id="date" name="date"
                min="{{ $minDate->toDateString() }}"
                max="{{ $maxDate->toDateString() }}"
                value="{{ $selectedDate }}" required>
-        <button type="submit">Check</button>
+        <button type="submit" class="btn btn-primary btn-sm">Check</button>
     </form>
 
     @error('date')
-        <div style="color:#dc3545;">{{ $message }}</div>
+        <div class="badge badge-danger">{{ $message }}</div>
     @enderror
 
     <h3>Slots for {{ $date }}</h3>
     @if (empty($slots))
         <p>No available slots for this date.</p>
     @else
-        <ul style="list-style:none; padding-left:0;">
+        <ul class="mt-2">
             @foreach ($slots as $slot)
                 @php
                     $slotStart = \Carbon\Carbon::parse($slot, $tz);
                     $isPast = $slotStart->isPast();
                 @endphp
-                <li style="margin-bottom:0.5rem;">
-                    <form method="POST" action="{{ route('appointments.store') }}" style="display:inline;">
+                <li class="mt-1">
+                    <form method="POST" action="{{ route('appointments.store') }}" class="inline-actions">
                         @csrf
                         <input type="hidden" name="provider_id" value="{{ $provider->id }}">
                         <input type="hidden" name="service_id" value="{{ $service->id }}">
                         <input type="hidden" name="start_at" value="{{ $slot }}">
-                        <span style="display:inline-block; min-width:180px;">{{ $slotStart->format('H:i') }}</span>
-                        <button type="submit" data-start="{{ $slot }}" @if($isPast) disabled @endif>Book</button>
+                        <span>{{ $slotStart->format('H:i') }}</span>
+                        <button class="btn btn-primary btn-sm" type="submit" data-start="{{ $slot }}" @if($isPast) disabled @endif>Book</button>
                     </form>
                 </li>
             @endforeach

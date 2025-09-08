@@ -4,76 +4,65 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ config('app.name', 'Laravel') }}</title>
-    <style>
-        :root { --c1:#0d6efd; --c2:#198754; --muted:#6c757d; }
-        body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin:0; }
-        nav { display:flex; justify-content:space-between; align-items:center; padding:0.75rem 1rem; border-bottom:1px solid #eee; }
-        nav a { margin-right:0.75rem; text-decoration:none; color:#0d6efd; }
-        nav a:last-child { margin-right:0; }
-        main { padding:1.25rem; }
-        .brand { color:#000; text-decoration:none; font-weight:600; }
-        form.inline { display:inline; margin:0; }
-        button.linky { background:none; border:none; color:#dc3545; cursor:pointer; padding:0; font:inherit; }
-        .user { color:#000; margin-right:0.75rem; }
-    </style>
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 </head>
 <body>
-    <nav>
+    <nav class="p-2" >
         <div>
-            <a class="brand" href="{{ url('/') }}">{{ config('app.name', 'Laravel') }}</a>
+            <a href="{{ url('/') }}">{{ config('app.name', 'Laravel') }}</a>
         </div>
-        <div>
+        <div class="inline-actions">
             @if (Route::has('providers.index'))
-                <a href="{{ route('providers.index') }}">Find a Provider</a>
+                <a class="link" href="{{ route('providers.index') }}">Find a Provider</a>
             @endif
             @auth
-                <span class="user">{{ auth()->user()->name }}</span>
+                <span class="muted">{{ auth()->user()->name }}</span>
                 @if (Route::has('dashboard'))
-                    <a href="{{ route('dashboard') }}">Dashboard</a>
+                    <a class="link" href="{{ route('dashboard') }}">Dashboard</a>
                 @else
-                    <a href="{{ url('/') }}">Dashboard</a>
+                    <a class="link" href="{{ url('/') }}">Dashboard</a>
                 @endif
 
                 @if (auth()->user()->isRole('admin'))
                     @if (Route::has('admin.dashboard'))
-                        <a href="{{ route('admin.dashboard') }}">Admin</a>
+                        <a class="link" href="{{ route('admin.dashboard') }}">Admin</a>
                     @endif
                 @endif
 
                 @if (auth()->user()->isRole('provider'))
                     @if (Route::has('provider.services.index'))
-                        <a href="{{ route('provider.services.index') }}">Services</a>
+                        <a class="link" href="{{ route('provider.services.index') }}">Services</a>
                     @endif
                     @if (Route::has('calendar.day'))
-                        <a href="{{ route('calendar.day') }}">Calendar</a>
+                        <a class="link" href="{{ route('calendar.day') }}">Calendar</a>
                     @endif
                     @if (Route::has('provider.appointments.index'))
-                        <a href="{{ route('provider.appointments.index') }}">Appointments</a>
+                        <a class="link" href="{{ route('provider.appointments.index') }}">Appointments</a>
                     @endif
                     @if (Route::has('provider.schedules.index'))
-                        <a href="{{ route('provider.schedules.index') }}">My Schedules</a>
+                        <a class="link" href="{{ route('provider.schedules.index') }}">My Schedules</a>
                     @endif
                     @if (Route::has('provider.time-offs.index'))
-                        <a href="{{ route('provider.time-offs.index') }}">Time Offs</a>
+                        <a class="link" href="{{ route('provider.time-offs.index') }}">Time Offs</a>
                     @endif
                 @endif
                 @if (auth()->user()->isRole('customer'))
                     @if (Route::has('my.appointments.index'))
-                        <a href="{{ route('my.appointments.index') }}">My Appointments</a>
+                        <a class="link" href="{{ route('my.appointments.index') }}">My Appointments</a>
                     @endif
                 @endif
-                <form method="POST" action="{{ route('logout') }}" class="inline">
+                <form method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <button type="submit" class="linky">Logout</button>
+                    <button type="submit" class="btn btn-danger btn-sm">Logout</button>
                 </form>
             @endauth
 
             @guest
                 @if (Route::has('login'))
-                    <a href="{{ route('login') }}">Login</a>
+                    <a class="link" href="{{ route('login') }}">Login</a>
                 @endif
                 @if (Route::has('register.show'))
-                    <a href="{{ route('register.show') }}">Register</a>
+                    <a class="link" href="{{ route('register.show') }}">Register</a>
                 @endif
             @endguest
         </div>
