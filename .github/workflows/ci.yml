@@ -55,4 +55,4 @@ jobs:
         run: php artisan migrate --force --seed
 
       - name: Run tests (MySQL)
-        run: php artisan test -q --configuration phpunit.ci.xml
+        run: php artisan test -v
