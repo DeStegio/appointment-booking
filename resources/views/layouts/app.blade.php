@@ -72,7 +72,6 @@
       </div>
     </div>
 
-    @include('partials.alerts')
 
     <main id="main" class="container section">
       @yield('content')
@@ -82,7 +81,7 @@
       <div class="container">
         <div class="flex items-center justify-between">
           <div class="muted">&copy; {{ date('Y') }} {{ config('app.name', 'Appointment Booking') }}</div>
-          <div><a class="link" href="{{ route('healthz') }}">Status</a></div>
+          <div><a class="link focus-ring" href="{{ route('healthz') }}">Status</a></div>
         </div>
       </div>
     </footer>

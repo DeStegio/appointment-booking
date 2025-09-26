@@ -7,6 +7,6 @@ return [
     ],
 
     // Where to store compiled Blade templates
-    'compiled' => env('VIEW_COMPILED_PATH', '/tmp/laravel-views'),
+    'compiled' => env('VIEW_COMPILED_PATH', storage_path('framework/views')),
 ];
 

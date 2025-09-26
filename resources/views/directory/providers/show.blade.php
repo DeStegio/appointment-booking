@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-  <div class="card">
+  <div class="primary-card">
     <div class="card-header">
       <h1 class="title">{{ $provider->name }}</h1>
       <div class="muted">{{ $provider->email }}</div>
